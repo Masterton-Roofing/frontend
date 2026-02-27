@@ -3,3 +3,6 @@
 // */
 @import "tailwindcss";
 
+.header {
+    font-family: "Adwaita Mono";
+}

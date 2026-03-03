@@ -15,21 +15,11 @@ function Footer() {
                 <div className="grid gap-16 row-gap-10 mb-8 lg:grid-cols-6 text-white">
                     <div className="md:max-w-md lg:col-span-2">
                         <a href="/" aria-label="Go home" title="Company" className="inline-flex items-center">
-                            <svg
-                                className="w-8 text-teal-400"
-                                viewBox="0 0 24 24"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeMiterlimit="10"
-                                stroke="currentColor"
-                                fill="none"
-                            >
-                                <rect x="3" y="1" width="7" height="12"></rect>
-                                <rect x="3" y="17" width="7" height="6"></rect>
-                                <rect x="14" y="1" width="7" height="6"></rect>
-                                <rect x="14" y="11" width="7" height="12"></rect>
-                            </svg>
+                            <img
+                                src="/img/templogo.png"
+                                alt="Masterton Roofing"
+                                className="h-8 w-auto"
+                            />
                             <span className="ml-2 text-xl font-bold tracking-wide text-gray-100 uppercase">Masterton Roofing</span>
                         </a>
                         <div className="mt-4 lg:max-w-sm">

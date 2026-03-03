@@ -1,12 +1,10 @@
-//* Copyright (c) 2026 Masterton Roofing Ltd.
-// All rights reserved.
-// */
 import { defineConfig } from 'vite';
-import tailwindcss from '@tailwindcss/vite'
-export default defineConfig(
-    {
-        plugins: [
-            tailwindcss({})
-        ]
-    }
-)
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    tailwindcss(),
+  ],
+});

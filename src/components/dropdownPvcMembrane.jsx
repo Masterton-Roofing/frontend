@@ -30,6 +30,21 @@ export default function DropdownPvcMembrane() {
                         The material remains flexible, allowing it to move slightly with the building as temperatures change or the structure settles, which helps prevent damage.
                         When used with mechanically fixed roofing systems, it also helps the roof stay secure by offering excellent resistance to strong winds and uplift forces.
                     </p>
+                    <span className="text-2xl font-bold mb-2">Specifications</span>
+                    <p className="mb-4">
+                        Danosa DANOPOL+ HS
+
+                        Available thicknesses: 1.5 mm, 1.2 mm
+
+                        Available colours: Anthracite
+
+                        Length (cm per roll): 2000 (1.5 mm), 2500 (1.2 mm)
+
+                        Width (cm per roll): 108
+
+                        Fire Regulation: Broof(T4)
+                    </p>
+                    <img className="mx-auto" src="/img/hs.png"/>
                 </div>
             </div>
         </div>

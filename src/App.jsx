@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Solutions from "./pages/Solutions";
 import Vcl from "./pages/solutions/vcl";
 import Pvc from "./pages/solutions/pvc";
+import Drone from "./pages/solutions/drone";
 
 // do this to make a change
 
@@ -21,6 +22,7 @@ function App() {
             <Route path="/solutions" element={<Solutions />} />
             <Route path="/solutions/vcl" element={<Vcl />} />
             <Route path="/solutions/pvc-membrane" element={<Pvc />} />
+            <Route path="/solutions/drone" element={<Drone />} />
           </Routes>
         </main>
         <Footer />

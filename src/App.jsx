@@ -21,7 +21,7 @@ function App() {
             <Route path="/solutions.html" element={<Solutions />} />
             <Route path="/solutions" element={<Solutions />} />
             <Route path="/solutions/vcl" element={<Vcl />} />
-            <Route path="/solutions/pvc-membrane" element={<Pvc />} />
+            <Route path="/solutions/pvc" element={<Pvc />} />
             <Route path="/solutions/drone" element={<Drone />} />
           </Routes>
         </main>

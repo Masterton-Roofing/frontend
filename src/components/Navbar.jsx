@@ -7,17 +7,29 @@ function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSolutionsOpen, setMobileSolutionsOpen] = useState(false);
 
-  const isActive = (path) =>
-    currentPath === path || (path === "/" && currentPath === "/index.html");
+  // Helper to determine if a link is active
+  // Now handles sub-routes (e.g., "Solutions" stays active when on "PVC Membrane")
+  const isActive = (path) => {
+    if (path === "/") {
+      return currentPath === "/" || currentPath === "/index.html";
+    }
+    return currentPath.startsWith(path);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileOpen(false);
+    setMobileSolutionsOpen(false);
+  };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-800/50 backdrop-blur-md border-b border-white/10">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-800/80 backdrop-blur-md border-b border-white/10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           {/* Logo */}
           <Link
             to="/"
             className="flex-shrink-0 flex items-center text-white font-bold text-xl tracking-tight"
+            onClick={closeMobileMenu}
           >
             Masterton Roofing
           </Link>
@@ -27,7 +39,7 @@ function Navbar() {
             <Link
               to="/"
               className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                isActive("/")
+                isActive("/") && currentPath === "/"
                   ? "bg-gray-950/50 text-white"
                   : "text-gray-300 hover:bg-white/5 hover:text-white"
               }`}
@@ -35,12 +47,17 @@ function Navbar() {
               Home
             </Link>
 
-            {/* Solutions dropdown */}
+            {/* Solutions Dropdown Group */}
             <div className="relative group">
-              {/* Hover Trigger */}
-              <button
+              {/* 
+                                Clickable Parent Link: 
+                                Navigates to /solutions on click, 
+                                but the parent 'group' class triggers the dropdown on hover.
+                            */}
+              <Link
+                to="/solutions"
                 className={`rounded-md px-3 py-2 text-sm font-medium flex items-center transition-colors ${
-                  currentPath.startsWith("/solutions")
+                  isActive("/solutions")
                     ? "bg-gray-950/50 text-white"
                     : "text-gray-300 hover:bg-white/5 hover:text-white"
                 }`}
@@ -59,12 +76,12 @@ function Navbar() {
                     d="M19 9l-7 7-7-7"
                   />
                 </svg>
-              </button>
+              </Link>
 
               {/* 
                                 Dropdown Menu Container 
-                                Note: We use 'pt-2' and 'top-full' to create an invisible 
-                                bridge so the hover doesn't break when moving the mouse down.
+                                'top-full' and 'pt-2' creates the 'Invisible Bridge' 
+                                so the mouse doesn't leave the hover zone.
                             */}
               <div className="absolute left-0 top-full w-64 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <div className="bg-gray-800 rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 overflow-hidden border border-gray-700">
@@ -116,7 +133,7 @@ function Navbar() {
             </div>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile Menu Toggle Button */}
           <div className="sm:hidden flex items-center">
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -150,15 +167,15 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Panel */}
       {mobileOpen && (
         <div className="sm:hidden bg-gray-900 border-t border-gray-700">
           <div className="space-y-1 px-2 pb-3 pt-2">
             <Link
               to="/"
-              onClick={() => setMobileOpen(false)}
+              onClick={closeMobileMenu}
               className={`block px-3 py-2 rounded-md text-base font-medium ${
-                isActive("/")
+                currentPath === "/"
                   ? "bg-gray-950 text-white"
                   : "text-gray-300 hover:bg-gray-800"
               }`}
@@ -166,10 +183,14 @@ function Navbar() {
               Home
             </Link>
 
-            {/* Mobile Solutions Dropdown */}
+            {/* Mobile Solutions Accordion */}
             <div>
               <button
-                className="w-full text-left px-3 py-2 text-base font-medium flex justify-between items-center text-gray-300 hover:bg-gray-800"
+                className={`w-full text-left px-3 py-2 text-base font-medium flex justify-between items-center rounded-md ${
+                  isActive("/solutions")
+                    ? "text-white bg-white/5"
+                    : "text-gray-300 hover:bg-gray-800"
+                }`}
                 onClick={() => setMobileSolutionsOpen(!mobileSolutionsOpen)}
               >
                 Solutions
@@ -191,20 +212,29 @@ function Navbar() {
               </button>
 
               {mobileSolutionsOpen && (
-                <div className="mt-1 space-y-1 bg-gray-950/30 rounded-lg mx-2 pb-2">
+                <div className="mt-1 space-y-1 bg-gray-950/40 rounded-lg mx-2 pb-2 border border-white/5">
+                  {/* Main Solutions Landing Page Link (Essential for mobile) */}
+                  <Link
+                    to="/solutions"
+                    onClick={closeMobileMenu}
+                    className="block px-4 py-3 text-sm font-bold text-blue-400 hover:bg-gray-800 rounded-t-lg"
+                  >
+                    All Solutions Overview →
+                  </Link>
+
                   <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">
                     Main Solutions
                   </div>
                   <Link
                     to="/solutions/pvc-membrane"
-                    onClick={() => setMobileOpen(false)}
+                    onClick={closeMobileMenu}
                     className="block px-8 py-2 text-sm text-gray-300 hover:text-white"
                   >
                     PVC Membrane
                   </Link>
                   <Link
                     to="/solutions/vcl"
-                    onClick={() => setMobileOpen(false)}
+                    onClick={closeMobileMenu}
                     className="block px-8 py-2 text-sm text-gray-300 hover:text-white"
                   >
                     VCL
@@ -215,21 +245,21 @@ function Navbar() {
                   </div>
                   <Link
                     to="/solutions/drone"
-                    onClick={() => setMobileOpen(false)}
+                    onClick={closeMobileMenu}
                     className="block px-8 py-2 text-sm text-gray-300 hover:text-white"
                   >
                     Drone Footage
                   </Link>
                   <Link
                     to="/solutions/roof-inspections"
-                    onClick={() => setMobileOpen(false)}
+                    onClick={closeMobileMenu}
                     className="block px-8 py-2 text-sm text-gray-300 hover:text-white"
                   >
                     Roof Inspections
                   </Link>
                   <Link
                     to="/solutions/mansafe"
-                    onClick={() => setMobileOpen(false)}
+                    onClick={closeMobileMenu}
                     className="block px-8 py-2 text-sm text-gray-300 hover:text-white"
                   >
                     Mansafe Systems

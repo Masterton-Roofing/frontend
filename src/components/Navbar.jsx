@@ -17,7 +17,7 @@ export default function Navbar() {
             {/* Solutions Dropdown */}
             <div className="relative group">
 
-              <button className="flex items-center text-gray-200 hover:text-white">
+              <Link to="/solutions" className="flex items-center text-gray-200 hover:text-white">
                 Solutions
                 <svg
                   className="ml-1 h-4 w-4"
@@ -27,7 +27,7 @@ export default function Navbar() {
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
-              </button>
+              </Link>
 
               {/* Main dropdown */}
               <div className="absolute right-0 mt-3 w-80 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200">

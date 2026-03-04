@@ -35,4 +35,4 @@ function Drone() {
 }
 
 // 3. You must export it to use it in your App.jsx
-export default decodeURIComponent;
+export default Drone;

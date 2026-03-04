@@ -8,7 +8,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link to="/" className="text-xl font-bold">
-            Masterton Roofing
+            <img src="/img/templogo.png" alt="Masterton Roofing" className="h-8 w-auto" />
           </Link>
 
           {/* Navigation */}

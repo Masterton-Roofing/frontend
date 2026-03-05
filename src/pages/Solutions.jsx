@@ -1,4 +1,3 @@
-import DropdownPvcMembrane from "../components/dropdownPvcMembrane.jsx";
 import SolutionArticle from "../components/SolutionArticle.jsx";
 function Solutions() {
     return (

@@ -58,6 +58,25 @@ function Pvc() {
               image={"/img/hs.png"}
             />
 
+            <SolutionArticle 
+            title="PVC Membrane - Adhered"
+            blurb="Adhered Membrane is very similar to mechanically fixed membrane except it's adhered (glued) onto the insulation. The membrane still has the same flexibility, durability and 20-year product warranty, as the other main membrane."
+            about="This PVC roofing membrane is designed to work well on roofs of all shapes and sizes, making it suitable for both simple and more complex designs. 
+            It is made to last, with strong resistance to things like natural effects of UV damage and ageing over time. 
+            The material remains flexible, allowing it to move slightly with the building as temperatures change or the structure settles, which helps prevent damage. 
+            When used with adhered roofing systems, it is glued down to the roof deck using an adhesive."
+            specs="Danosa DANOPOL+ HSF 1.5 mm
+
+            Available thicknesses: 1.5 mm
+            
+            Length (cm per roll): 1500
+            
+            Width (cm per roll): 180
+            
+            Fire Regulation: Broof(T4)"
+            image="/img/pvc-adh.png"
+            />
+
             <SolutionArticle
               title="PVC Corners"
               blurb="Corners are essential for any roof as they seal open corners and prevent water from entering the building. It is incredibly effective at preventing leaks since it is pre-made and fit like puzzle pieces."

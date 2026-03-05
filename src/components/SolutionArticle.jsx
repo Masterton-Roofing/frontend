@@ -47,7 +47,7 @@ export default function SolutionArticle({
                     <p className="text-gray-700 mb-4">{about}</p>
 
                     <h3 className="text-xl font-semibold mb-2">Specifications</h3>
-                    <p className="text-gray-700 mb-6">{specs}</p>
+                    <p className="text-gray-700 mb-6 whitespace-pre-line" >{specs}</p>
 
                     {/* Image gallery */}
                     {images.length > 0 && (

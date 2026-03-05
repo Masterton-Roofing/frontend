@@ -1,3 +1,4 @@
+import ServicesPreview from "../components/ServicesPreview";
 function Home() {
     return (
         <>
@@ -21,6 +22,7 @@ function Home() {
                     </div>
                 </div>
             </section>
+            <ServicesPreview />
         </>
     );
 }

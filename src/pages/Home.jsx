@@ -17,7 +17,7 @@ function Home() {
                         </p>
                     </div>
                     <div className="w-1/2">
-                        <img src="https://placehold.co/600x400" alt="About us" className="rounded-lg shadow-lg w-full" />
+                        <img src="https://www.mastertonroofing.com/img/work/unnamed.jpg" alt="About us" className="rounded-lg shadow-lg w-full" />
                     </div>
                 </div>
             </section>

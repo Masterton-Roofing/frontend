@@ -1,7 +1,6 @@
 import { useState } from "react";
+import SolutionArticle from "../../components/SolutionArticle";
 
-// 1. Component name must be capitalized (Vcl)
-// 2. Syntax must be 'function Name()' or 'const Name = () =>'
 function Pvc() {
   return (
     <>
@@ -11,8 +10,6 @@ function Pvc() {
         style={{ backgroundImage: "url('https://placehold.co/600x400')" }}
       >
         <div className="flex items-center justify-center h-full bg-black/40">
-          {" "}
-          {/* Added a dark overlay to make text readable */}
           <h1 className="text-white text-5xl font-bold text-center">
             PVC Membrane - Solutions
           </h1>
@@ -21,18 +18,86 @@ function Pvc() {
 
       {/* Content Section */}
       <section className="py-16 bg-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8">
-          <div className="w-full md:w-1/2">
-            <h2 className="text-3xl font-bold mb-4 text-gray-900">
-              Our PVC Solutions
-            </h2>
-            <p className="text-gray-700 mb-6">mmm plastik...</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <h2 className="text-3xl font-bold mb-8 text-gray-900 text-center md:text-left">
+            Our PVC Roofing Solutions
+          </h2>
+          
+          {/* 
+            ADDED 'items-start':
+            This prevents the 'stretching' behavior. 
+            When one article expands, the other stays at its original height.
+          */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            <SolutionArticle
+              title="PVC Membrane"
+              blurb={
+                "Our main material is the PVC membrane, which we have chosen to use for all our roofs due to its extreme weather resistance and durability. " +
+                "It can either be mechanically fixed or glued down (see adhered membrane article). It has a minium product warranty of 20 years."
+              }
+              about={
+                "This PVC roofing membrane is designed to work well on roofs of all shapes and sizes, making it suitable for both simple and more complex designs. " +
+                "It is made to last, with strong resistance to things like natural effects of UV damage and ageing over time. " +
+                "The material remains flexible, allowing it to move slightly with the building as temperatures change or the structure settles, which helps prevent damage." +
+                " When used with mechanically fixed roofing systems, it also helps the roof stay secure by offering excellent resistance to strong winds and uplift forces.\n"
+              }
+              specs={
+                "Danosa DANOPOL+ HS\n" +
+                "\n" +
+                "Available thicknesses: 1.5 mm, 1.2 mm\n" +
+                "\n" +
+                "Available colours: Anthracite\n" +
+                "\n" +
+                "Length (cm per roll): 2000 (1.5 mm), 2500 (1.2 mm)\n" +
+                "\n" +
+                "Width (cm per roll): 108\n" +
+                "\n" +
+                "Fire Regulation: Broof(T4)"
+              }
+              image={"/img/hs.png"}
+            />
+
+            <SolutionArticle 
+            title="PVC Membrane - Adhered"
+            blurb="Adhered Membrane is very similar to mechanically fixed membrane except it's adhered (glued) onto the insulation. The membrane still has the same flexibility, durability and 20-year product warranty, as the other main membrane."
+            about="This PVC roofing membrane is designed to work well on roofs of all shapes and sizes, making it suitable for both simple and more complex designs. 
+            It is made to last, with strong resistance to things like natural effects of UV damage and ageing over time. 
+            The material remains flexible, allowing it to move slightly with the building as temperatures change or the structure settles, which helps prevent damage. 
+            When used with adhered roofing systems, it is glued down to the roof deck using an adhesive."
+            specs="Danosa DANOPOL+ HSF 1.5 mm
+
+            Available thicknesses: 1.5 mm
+            
+            Length (cm per roll): 1500
+            
+            Width (cm per roll): 180
+            
+            Fire Regulation: Broof(T4)"
+            image="/img/pvc-adh.png"
+            />
+
+            <SolutionArticle
+              title="PVC Corners"
+              blurb="Corners are essential for any roof as they seal open corners and prevent water from entering the building. It is incredibly effective at preventing leaks since it is pre-made and fit like puzzle pieces."
+              about="The pre-made corners seal all corner openings on the roof by putting in a corner and hot air welding them in place just like normal PVC membrane. 
+              This makes sure that no rainwater can enter your home or business through these areas. 
+              The best part about using pre-made corners is that you can adjust them to the angle of the corner whether it's an obtuse angle or acute."
+              specs="Danosa External/Internal PVC Corners
+
+              Colour: Anthracite
+              
+              Length (cm): 10
+              
+              Available variants: Internal, External"
+              image="/img/corner.png"
+            />
           </div>
+
         </div>
       </section>
     </>
   );
 }
 
-// 3. You must export it to use it in your App.jsx
 export default Pvc;

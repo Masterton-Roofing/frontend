@@ -55,7 +55,9 @@ function Pvc() {
                 "\n" +
                 "Fire Regulation: Broof(T4)"
               }
-              image={"/img/hs.png"}
+              images={[
+                  "/img/hs.png",
+              ]}
             />
 
             <SolutionArticle 
@@ -74,7 +76,9 @@ function Pvc() {
             Width (cm per roll): 180
             
             Fire Regulation: Broof(T4)"
-            image="/img/pvc-adh.png"
+            images={[
+                "/img/pvc-adh.png"
+            ]}
             />
 
             <SolutionArticle
@@ -90,7 +94,10 @@ function Pvc() {
               Length (cm): 10
               
               Available variants: Internal, External"
-              image="/img/corner.png"
+              images={[
+                "/img/corner.png",
+                "/img/corner2.png"
+              ]}
             />
           </div>
 

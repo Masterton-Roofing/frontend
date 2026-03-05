@@ -1,7 +1,7 @@
 function Home() {
     return (
         <>
-            <section className="hero h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://placehold.co/600x400')" }}>
+            <section className="hero h-screen bg-cover bg-center" style={{ backgroundImage: "url('/img/roberto.jpeg')" }}>
                 <div className="flex items-center justify-center h-full">
                     <h1 className="header text-5xl text-center">Welcome to Masterton Roofing</h1>
                 </div>

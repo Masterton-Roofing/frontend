@@ -27,7 +27,7 @@ function Vcl() {
               Our VCL Solutions
             </h2>
             <p className="text-gray-700 mb-6">
-              Vapor Control Layers (VCL) are essential for protecting the
+              The Vapor Control Layer (VCL) is essential for protecting the
               integrity of your building's insulation and structure by managing
               moisture movement. We provide high-performance VCL installations
               tailored to your specific roofing system.

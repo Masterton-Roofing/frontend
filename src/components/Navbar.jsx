@@ -51,8 +51,8 @@ export default function Navbar() {
                       </div>
                       <div className="absolute top-0 left-full ml-1 w-64 opacity-0 invisible group-hover/services:visible group-hover/services:opacity-100 transition-all duration-200">
                         <div className="bg-gray-800 rounded-lg shadow-xl border border-gray-700 overflow-hidden">
-                          <Link to="/services/water-checks" className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
-                            Water Checks
+                          <Link to="/services/leak-detection" className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
+                            Leak Detection
                           </Link>
                           <Link to="/services/roof-surveys" className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
                             Roof Surveys

@@ -18,7 +18,7 @@ export default function ServicesPreview() {
             desc: "Leak detection and preventative checks."
         },
         {
-            icon: <FaPlus size={40} color="#f2e599"/>,
+            icon: <FaPlus size={40} color="#01597c"/>,
             title: "Add-ons",
             desc: "Mansafe systems, drone surveys and more."
         }

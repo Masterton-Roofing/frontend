@@ -13,7 +13,7 @@ export default function ServicesPreview() {
             desc: "Professional roof condition inspections."
         },
         {
-            icon: <FaTint size={40} color="#f2e599" />,
+            icon: <FaTint size={40} color="#01597c" />,
             title: "Water Checks",
             desc: "Leak detection and preventative checks."
         },

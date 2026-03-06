@@ -3,22 +3,22 @@ import { FaHardHat, FaSearch, FaTint, FaPlus } from "react-icons/fa";
 export default function ServicesPreview() {
     const services = [
         {
-            icon: <FaHardHat size={40} />,
+            icon: <FaHardHat size={40} color="#01597c" />,
             title: "Roofing Systems",
             desc: "PVC membrane and flat roofing solutions."
         },
         {
-            icon: <FaSearch size={40} />,
+            icon: <FaSearch size={40} color="#01597c"            />,
             title: "Roof Surveys",
             desc: "Professional roof condition inspections."
         },
         {
-            icon: <FaTint size={40} />,
+            icon: <FaTint size={40} color="#f2e599" />,
             title: "Water Checks",
             desc: "Leak detection and preventative checks."
         },
         {
-            icon: <FaPlus size={40} />,
+            icon: <FaPlus size={40} color="#f2e599"/>,
             title: "Add-ons",
             desc: "Mansafe systems, drone surveys and more."
         }

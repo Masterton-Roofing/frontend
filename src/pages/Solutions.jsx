@@ -1,4 +1,6 @@
 import SolutionArticle from "../components/SolutionArticle.jsx";
+import Pvc from "./solutions/Pvc";
+import { Link } from "react-router-dom";
 function Solutions() {
     return (
         <>
@@ -23,10 +25,18 @@ function Solutions() {
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                        <button
-                            className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
-                            PVC Roofing
-                        </button>
+
+
+                        <Link to="/solutions/pvc">
+                            <button
+                                type="button"
+                                className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+                            >
+                                PVC Roofing
+                            </button>
+                        </Link>
+
+
                     </div>
 
                 </div>

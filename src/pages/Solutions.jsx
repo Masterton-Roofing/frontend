@@ -1,5 +1,4 @@
 import SolutionArticle from "../components/SolutionArticle.jsx";
-import Pvc from "./solutions/Pvc";
 import { Link } from "react-router-dom";
 function Solutions() {
     return (

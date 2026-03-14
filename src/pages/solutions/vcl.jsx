@@ -8,7 +8,7 @@ function Vcl() {
       {/* Hero Section */}
       <section
         className="hero h-screen bg-cover bg-center"
-        style={{ backgroundImage: "url('https://placehold.co/600x400')" }}
+        style={{ backgroundImage: "url('/img/vcl.jpg')" }}
       >
         <div className="flex items-center justify-center h-full bg-black/40">
           {" "}

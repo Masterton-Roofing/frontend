@@ -12,8 +12,8 @@ function Home() {
                     <div className="w-1/2">
                         <h2 className="text-3xl font-bold mb-4">About Us</h2>
                         <p className="text-gray-700 mb-6">
-                            Welcome to Masterton Roofing Limited! With years of experience in the industry, our team is dedicated to delivering top-quality roofing solutions that stand the test of time.
-                            We take pride in our craftsmanship, attention to detail, and commitment to customer satisfaction. From the initial consultation to the final inspection, we ensure every project is completed efficiently, safely, and to the maximum standards.
+                            Welcome to Masterton Roofing Limited! With 30+ years of experience in roofing the industry, our team is dedicated to delivering top-quality roofing solutions that stand the test of time.
+                            We take pride in our workmanship, attention to detail, and commitment to customer satisfaction. From the initial consultation to the final inspection, we ensure every project is completed efficiently, safely, and to the maximum standards.
                             Trust us to provide you with a roof that not only looks great but also offers lasting protection for your home or business.
                         </p>
                     </div>

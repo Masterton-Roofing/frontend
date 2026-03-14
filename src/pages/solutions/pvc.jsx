@@ -39,17 +39,9 @@ function Pvc() {
                 "This PVC roofing membrane is designed to work on flat roofs of all shapes and sizes, making it suitable for both simple and more complex designs. It is made to last, with strong resistance to the elements like natural effects of UV damage and ageing over time. The material remains flexible, allowing for all building movements along with the building as temperatures change and the building structure settles, which helps prevent damage. Using mechanically fixed  systems, not only has a great tolerants with building movents  it also keeps the roof  secure with excellent resistance to strong winds and uplift forces."
               }
               specs={
-                "Danosa DANOPOL+ HS\n" +
-                "\n" +
-                "Available thicknesses: 1.5 mm, 1.2 mm\n" +
-                "\n" +
-                "Available colours: Anthracite\n" +
-                "\n" +
-                "Length (cm per roll): 2000 (1.5 mm), 2500 (1.2 mm)\n" +
-                "\n" +
-                "Width (cm per roll): 108\n" +
-                "\n" +
-                "Fire Regulation: Broof(T4)"
+                "Danosa DANOPOL 1.5 HS+ Available colours: Anthracite Roll Lengths (cm per roll): 2000 \n" +
+                  " (cm per roll):1500 Roll Widths (cm per roll): 108\n" +
+                  "(cm per roll):1800 Fire Regulation: Broof(T4)"
               }
               images={[
                   "/img/hs.png",

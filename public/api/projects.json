@@ -1,0 +1,8 @@
+[
+  {
+    "id": 1,
+    "name": "This is a test project and should not make it to prod.",
+    "description": "This is a test project and should not make it to prod.",
+    "image": "/api/images/corner.png"
+  }
+]

@@ -71,6 +71,7 @@ export default function Navbar() {
 
             <Link to="/about" className="text-mr-yellow hover:text-white font-bold">About</Link>
             <Link to="/contact" className="text-mr-yellow hover:text-white font-bold">Contact</Link>
+            <Link to="/projects" className="text-mr-yellow hover:text-white font-bold">Projects</Link>
             <Link to="/gallery" className="text-mr-yellow hover:text-white font-bold">Gallery</Link>
           </div>
         </div>

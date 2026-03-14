@@ -33,14 +33,10 @@ function Pvc() {
             <SolutionArticle
               title="PVC Membrane"
               blurb={
-                "Our main material is the PVC membrane, which we have chosen to use for all our roofs due to its extreme weather resistance and durability. " +
-                "It can either be mechanically fixed or glued down (see adhered membrane article). It has a minium product warranty of 20 years."
+                "Our main material used for the waterproofing is singlyply PVC membrane, which we have chosen to use for all our roofs due to its extreme weather resistance and durability. It can either be mechanically fixed or glued down (see adhered membrane article). Using this material we gain a minimum product warranty of 20 years directly from the manufacturer " +
               }
               about={
-                "This PVC roofing membrane is designed to work well on roofs of all shapes and sizes, making it suitable for both simple and more complex designs. " +
-                "It is made to last, with strong resistance to things like natural effects of UV damage and ageing over time. " +
-                "The material remains flexible, allowing it to move slightly with the building as temperatures change or the structure settles, which helps prevent damage." +
-                " When used with mechanically fixed roofing systems, it also helps the roof stay secure by offering excellent resistance to strong winds and uplift forces.\n"
+                "This PVC roofing membrane is designed to work on flat roofs of all shapes and sizes, making it suitable for both simple and more complex designs. It is made to last, with strong resistance to the elements like natural effects of UV damage and ageing over time. The material remains flexible, allowing for all building movements along with the building as temperatures change and the building structure settles, which helps prevent damage. Using mechanically fixed  systems, not only has a great tolerants with building movents  it also keeps the roof  secure with excellent resistance to strong winds and uplift forces."
               }
               specs={
                 "Danosa DANOPOL+ HS\n" +

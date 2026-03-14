@@ -62,10 +62,8 @@ Available colours: Anthracite Roll  Length (cm per roll): 1500 Width (cm per rol
 
             <SolutionArticle
               title="PVC Corners"
-              blurb="Corners are essential for any roof as they seal open corners and prevent water from entering the building. It is incredibly effective at preventing leaks since it is pre-made and fit like puzzle pieces."
-              about="The pre-made corners seal all corner openings on the roof by putting in a corner and hot air welding them in place just like normal PVC membrane. 
-              This makes sure that no rainwater can enter your home or business through these areas. 
-              The best part about using pre-made corners is that you can adjust them to the angle of the corner whether it's an obtuse angle or acute."
+              blurb="Corners are essential for all roofs as they seal open edges and corners  prevent water from entering the building. It is incredibly effective at preventing leaks since it is factory  pre-made and fit like puzzle pieces."
+              about="The pre-made corners seal all corner openings on the roof by putting in a corner and hot air welding them in place just like normal PVC membrane. This makes sure that no rainwater can enter your home or business through these areas. The best part about using pre-made corners is that you can adjust them to the angle of the corner whether it's an obtuse angle or acute."
               specs="Danosa External/Internal PVC Corners
 
               Colour: Anthracite

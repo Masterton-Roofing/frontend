@@ -1,20 +1,48 @@
-import React from "react";
+import { useState } from "react";
 
 export default function ProjectCard({ project }) {
+    const [open, setOpen] = useState(false);
+
     return (
-        <li className="p-4 border rounded shadow hover:shadow-lg transition flex flex-col md:flex-row items-start md:items-center">
-            {project.image && (
-                <img
-                    src={project.image}
-                    alt={project.name}
-                    className="w-32 h-32 object-cover rounded mr-6 mb-4 md:mb-0"
-                />
-            )}
-            <div>
-                <h2 className="text-xl font-semibold">{project.name}</h2>
-                <p className="text-gray-700 mt-1">{project.description}</p>
-                <p className="text-sm text-gray-500 mt-1">ID: {project.id}</p>
+        <div className="w-full mx-auto mt-6">
+            <button
+                onClick={() => setOpen(!open)}
+                className="w-full flex justify-between items-center px-4 py-3 bg-slate-800 text-white rounded-lg transition"
+            >
+                <span>{project.name}</span>
+
+                <span
+                    className={`transform transition-transform duration-300 ${
+                        open ? "rotate-180" : ""
+                    }`}
+                >
+          ▼
+        </span>
+            </button>
+
+            <div
+                className={`overflow-hidden transition-all duration-300 ${
+                    open ? "max-h-[1000px] opacity-100 mt-2" : "max-h-0 opacity-0"
+                }`}
+            >
+                <div className="p-4 bg-slate-100 rounded-lg text-slate-700">
+                    <span className="text-2xl font-bold mb-2 block">About</span>
+
+                    <p className="mb-4">{project.description}</p>
+
+                    <span className="text-sm text-gray-500 block mb-4">
+            Project ID: {project.id}
+          </span>
+
+                    {project.image && (
+                        <img
+                            className="mx-auto rounded"
+                            src={project.image}
+                            alt={project.name}
+                        />
+                    )}
+                </div>
             </div>
-        </li>
+        </div>
     );
 }

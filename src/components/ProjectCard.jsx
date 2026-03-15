@@ -30,9 +30,6 @@ export default function ProjectCard({ project }) {
 
                     <p className="mb-4">{project.description}</p>
 
-                    <span className="text-sm text-gray-500 block mb-4">
-            Project ID: {project.id}
-          </span>
 
                     {project.image && (
                         <img

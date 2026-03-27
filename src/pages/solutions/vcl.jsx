@@ -7,13 +7,13 @@ function Vcl() {
     <>
       {/* Hero Section */}
       <section
-        className="hero h-screen bg-cover bg-center"
+        className="hero h-[60vh] md:h-[80vh] bg-cover bg-center"
         style={{ backgroundImage: "url('/img/vcl.jpg')" }}
       >
-        <div className="flex items-center justify-center h-full bg-black/40">
+        <div className="flex items-center justify-center h-full bg-black/40 px-4">
           {" "}
           {/* Added a dark overlay to make text readable */}
-          <h1 className="text-white text-5xl font-bold text-center">
+          <h1 className="text-white text-4xl md:text-5xl font-bold text-center">
             Vapor Control Layer - Solutions
           </h1>
         </div>

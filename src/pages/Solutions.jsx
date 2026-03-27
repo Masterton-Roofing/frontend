@@ -5,11 +5,11 @@ function Solutions() {
         <>
             {/* Hero Section */}
             <section
-                className="hero h-screen bg-cover bg-center"
+                className="hero h-[60vh] md:h-[80vh] bg-cover bg-center"
                 style={{ backgroundImage: "url('https://placehold.co/600x400')" }}
             >
-                <div className="flex items-center justify-center h-full bg-black/40">
-                    <h1 className="text-white text-5xl font-bold text-center">
+                <div className="flex items-center justify-center h-full bg-black/40 px-4">
+                    <h1 className="text-white text-4xl md:text-5xl font-bold text-center">
                         Solutions Hub
                     </h1>
                 </div>

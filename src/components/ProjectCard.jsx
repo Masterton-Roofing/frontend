@@ -7,12 +7,12 @@ export default function ProjectCard({ project }) {
         <div className="w-full mx-auto mt-6">
             <button
                 onClick={() => setOpen(!open)}
-                className="w-full flex justify-between items-center px-4 py-3 bg-slate-800 text-white rounded-lg transition"
+                className="w-full flex justify-between items-center px-4 py-3 bg-slate-800 text-white rounded-lg transition hover:bg-slate-700"
             >
-                <span>{project.name}</span>
+                <span className="text-left">{project.name}</span>
 
                 <span
-                    className={`transform transition-transform duration-300 ${
+                    className={`transform transition-transform duration-300 ml-2 ${
                         open ? "rotate-180" : ""
                     }`}
                 >

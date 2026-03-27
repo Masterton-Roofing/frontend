@@ -14,9 +14,9 @@ export default function SolutionArticle({
 
             {/* Preview */}
             <div className="p-6">
-                <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
+                <h2 className="text-xl md:text-2xl font-bold text-gray-800">{title}</h2>
 
-                <p className="mt-2 text-gray-600">
+                <p className="mt-2 text-gray-600 text-sm md:text-base">
                     {blurb}
                 </p>
 

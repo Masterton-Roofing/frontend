@@ -9,6 +9,7 @@ import Drone from "./pages/solutions/drone";
 import Projects from "./pages/Projects";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import Contact from "./pages/Contact";
 
 // do this to make a change
 

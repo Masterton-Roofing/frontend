@@ -30,6 +30,44 @@ function ContactForm() {
                 />
             </div>
             <div>
+                <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Name
+                </label>
+                <input
+                    id="name"
+                    type="text"
+                    name="name"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition duration-200"
+                    placeholder="Your Name"
+                    required
+                />
+                <ValidationError
+                    prefix="Name"
+                    field="name"
+                    errors={state.errors}
+                    className="mt-1 text-sm text-red-600"
+                />
+            </div>
+            <div>
+                <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Phone Number
+                </label>
+                <input
+                    id="phone"
+                    type="tel"
+                    name="phone"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition duration-200"
+                    placeholder="07700 123456"
+                    required
+                />
+                <ValidationError
+                    prefix="Phone"
+                    field="phone"
+                    errors={state.errors}
+                    className="mt-1 text-sm text-red-600"
+                />
+            </div>
+            <div>
                 <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-2">
                     Message
                 </label>

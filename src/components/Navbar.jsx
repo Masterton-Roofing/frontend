@@ -70,6 +70,7 @@ export default function Navbar() {
             </div>
 
             <Link to="/projects" className="text-gray-300 hover:text-white font-bold transition">Projects</Link>
+            <Link to="/blog" className="text-gray-300 hover:text-white font-bold transition">Blog</Link>
             <Link to="/contact" className="text-gray-300 hover:text-white font-bold transition">Contact</Link>
             <Link to="/about" className="text-gray-300 hover:text-white font-bold transition">About</Link>
           </div>
@@ -127,6 +128,7 @@ export default function Navbar() {
           </div>
 
           <Link to="/projects" onClick={() => setIsMenuOpen(false)} className="text-xl font-bold text-gray-300 hover:text-white">Projects</Link>
+          <Link to="/blog" onClick={() => setIsMenuOpen(false)} className="text-xl font-bold text-gray-300 hover:text-white">Blog</Link>
           <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="text-xl font-bold text-gray-300 hover:text-white">Contact</Link>
           <Link to="/about" onClick={() => setIsMenuOpen(false)} className="text-xl font-bold text-gray-300 hover:text-white">About</Link>
         </div>

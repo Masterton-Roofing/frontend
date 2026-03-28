@@ -174,7 +174,7 @@ function Footer() {
         <div className="flex flex-col justify-between pt-5 pb-10 border-t border-gray-700 sm:flex-row">
           <p className="text-sm text-gray-100">
             © Copyright 2026 Masterton Roofing Ltd. All rights reserved. Website
-            written by Ben House.
+            written by Ben House. Powered by <a href={"https://deno.com/"}>Deno</a>
           </p>
           <div className="flex items-center mt-4 space-x-4 sm:mt-0">
             <a

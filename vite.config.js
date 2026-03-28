@@ -7,12 +7,4 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  build: {
-    rollupOptions: {
-      input: {
-        main: './index.html',
-        blog: './src/utils/blog.js'
-      }
-    }
-  }
 });

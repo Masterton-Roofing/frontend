@@ -19,4 +19,3 @@ Polyvinyl Chloride (PVC) is a single-ply white membrane used in commercial and r
 - **Longevity**: With proper installation, a PVC roof can last 20-30 years.
 - **Eco-Friendly**: It's often recyclable and energy-efficient due to its reflective properties.
 
-Stay tuned for more updates on our latest projects!

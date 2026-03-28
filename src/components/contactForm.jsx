@@ -6,7 +6,7 @@ import { useForm, ValidationError } from '@formspree/react';
 function ContactForm() {
     const [state, handleSubmit] = useForm("xykbkbeg");
     if (state.succeeded) {
-        return <p className="text-green-600 font-semibold p-4 bg-green-50 rounded-lg border border-green-200">Thanks for joining!</p>;
+        return <p className="text-green-600 font-semibold p-4 bg-green-50 rounded-lg border border-green-200">Thanks for your message! We will get back to you shortly!</p>;
     }
     return (
         <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
@@ -91,7 +91,7 @@ function ContactForm() {
                 disabled={state.submitting}
                 className="w-full bg-slate-900 text-white font-bold py-3 px-6 rounded-lg hover:bg-slate-800 transform transition active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed shadow-md"
             >
-                {state.submitting ? "Sending..." : "Send Message"}
+                {state.submitting ? "Sending... This may take some time - Do not close this tab" : "Send Message"}
             </button>
         </form>
     );

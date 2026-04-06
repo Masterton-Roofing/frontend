@@ -1,0 +1,19 @@
+{
+    "name": "mr/frontend",
+    "description": "PHP rewrite for frontend",
+    "autoload": {
+      "psr-4": {
+        "App\\": "src/"
+      }
+    },
+    "require": {
+        "spatie/yaml-front-matter": "^2.1",
+        "erusev/parsedown": "^1.7"
+    },
+    "authors": [
+        {
+            "name": "Ben House",
+            "email": "meowcat@meowcat.site"
+        }
+    ]
+}

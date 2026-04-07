@@ -1,24 +1,55 @@
 <?php
-$uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+// Normalize URI
+$uri = rtrim(urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/');
+if (empty($uri)) $uri = '/';
 
-// Serve static files from the root and public/ subdirectories if they exist
-// We skip directories to allow clean URLs that match directory names
+// Map clean URLs to PHP files
+$routes = [
+    '/' => '/index.php',
+    '/about' => '/about.php',
+    '/blog' => '/blog.php',
+    '/contact' => '/contact.php',
+    '/projects' => '/projects.php',
+    '/solutions' => '/solutions.php',
+    '/solutions/pvc' => '/solutions/pvc.php',
+    '/solutions/vcl' => '/solutions/vcl.php',
+    '/solutions/drone' => '/solutions/drone.php',
+    '/services/leak-detection' => '/solutions.php',
+    '/services/roof-surveys' => '/solutions.php',
+    '/services/addons' => '/solutions.php',
+];
+
+// 1. Check if the URI matches our explicit routing table
+if (isset($routes[$uri])) {
+    $script = __DIR__ . $routes[$uri];
+    if (file_exists($script)) {
+        require_once $script;
+        exit;
+    }
+}
+
+// 2. Special case for blog slugs
+if (preg_match('#^/blog/([^/.]+)$#', $uri, $matches)) {
+    $_GET['slug'] = $matches[1];
+    require_once __DIR__ . '/blog.php';
+    exit;
+}
+
+// 3. Serve static files from the root and public/ subdirectories if they exist
+// We only serve if it's NOT a directory and it's NOT a PHP file
 if ($uri !== '/') {
     $filePath = __DIR__ . $uri;
     $publicFilePath = __DIR__ . '/public' . $uri;
     
-    if (file_exists($filePath) && !is_dir($filePath)) {
+    // Check root files (except .php)
+    if (file_exists($filePath) && !is_dir($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) !== 'php') {
         return false;
     }
     
+    // Check public/ directory
     if (file_exists($publicFilePath) && !is_dir($publicFilePath)) {
-        // Re-write to public file path for PHP's built-in server to serve it
-        // OR simply readfile and exit if we want total control
-        // For php -S, returning false tells it to serve the file if it's in the document root
-        // But since we want to serve from /public/... as if it's from /...
-        // we might need to handle it ourselves or use a different approach.
-        
-        $mimeType = match (pathinfo($publicFilePath, PATHINFO_EXTENSION)) {
+        $ext = pathinfo($publicFilePath, PATHINFO_EXTENSION);
+        $mimeType = match ($ext) {
             'css' => 'text/css',
             'js' => 'application/javascript',
             'png' => 'image/png',
@@ -35,32 +66,7 @@ if ($uri !== '/') {
     }
 }
 
-// Special case for blog slugs
-if (preg_match('#^/blog/([^/]+)$#', $uri, $matches)) {
-    $_GET['slug'] = $matches[1];
-    require_once __DIR__ . '/blog.php';
-    exit;
-}
-
-// Map clean URLs to PHP files
-$routes = [
-    '/' => '/index.php',
-    '/about' => '/about.php',
-    '/blog' => '/blog.php',
-    '/contact' => '/contact.php',
-    '/projects' => '/projects.php',
-    '/solutions' => '/solutions.php',
-    '/solutions/pvc' => '/solutions/pvc.php',
-    '/solutions/vcl' => '/solutions/vcl.php',
-    '/solutions/drone' => '/solutions/drone.php',
-];
-
-if (isset($routes[$uri])) {
-    require_once __DIR__ . $routes[$uri];
-    exit;
-}
-
-// Default 404
+// 4. If nothing else matches, 404
 header("HTTP/1.0 404 Not Found");
 echo "<h1>404 Not Found</h1><p>The page you requested was not found.</p>";
 exit;

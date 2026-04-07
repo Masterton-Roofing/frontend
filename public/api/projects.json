@@ -1,1 +1,20 @@
-[{"id":2,"name":"microwave","description":"hamster + microwave \u003d good","image":""}]
+[
+  {
+    "id": 1,
+    "name": "Commercial PVC Installation",
+    "description": "A full 2000sqm PVC membrane installation for a major warehouse in Masterton. Completed in record time with a 20-year Danosa warranty.",
+    "image": "/public/img/maz.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Residential VCL and Roofing",
+    "description": "High-performance Vapour Control Layer and flat roofing system for a modern luxury home. Managed moisture movement effectively for maximum insulation lifespan.",
+    "image": "/public/img/vcl.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Aerial Roof Survey - Industrial Site",
+    "description": "Comprehensive drone survey for an industrial complex, identifying several hidden leaks and structural issues without expensive scaffolding.",
+    "image": "/public/img/roberto.jpeg"
+  }
+]

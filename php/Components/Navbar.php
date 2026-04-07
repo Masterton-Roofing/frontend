@@ -32,6 +32,9 @@ function renderNavbar() {
               <a href="/solutions/vcl" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition">
                 Vapour Control Layer (VCL)
               </a>
+              <a href="/solutions/drone" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition">
+                Drone Surveys
+              </a>
             </div>
 
             <div class="border-t border-slate-700 py-2">
@@ -99,6 +102,7 @@ function renderNavbar() {
         <a href="/solutions" class="block py-2 text-gray-400 hover:text-white">All Solutions</a>
         <a href="/solutions/pvc" class="block py-2 text-gray-400 hover:text-white">PVC Membrane</a>
         <a href="/solutions/vcl" class="block py-2 text-gray-400 hover:text-white">Vapour Control Layer (VCL)</a>
+        <a href="/solutions/drone" class="block py-2 text-gray-400 hover:text-white">Drone Surveys</a>
         
         <div class="pt-2 border-t border-slate-800">
           <button id="mobile-additional-button" class="flex justify-between items-center w-full py-2 text-gray-300 hover:text-white font-semibold">

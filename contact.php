@@ -4,7 +4,7 @@ require_once __DIR__ . '/php/Layout/Main.php';
 renderHeader("Contact Us - Masterton Roofing");
 ?>
 
-<section class="hero h-[80vh] md:h-screen bg-cover bg-center" style="background-image: url('https://placehold.co/600x400')">
+<section class="hero h-[80vh] md:h-screen bg-cover bg-center" style="background-image: url('/public/img/roberto.jpeg')">
     <div class="flex items-center justify-center h-full bg-black/30 px-4">
         <h1 class="header text-4xl md:text-5xl lg:text-6xl text-center text-white font-bold">Contact Us</h1>
     </div>

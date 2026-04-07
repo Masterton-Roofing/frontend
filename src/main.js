@@ -1,3 +1,0 @@
-//* Copyright (c) 2026 Masterton Roofing Ltd.
-// All rights reserved.
-// */

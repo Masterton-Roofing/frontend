@@ -22,7 +22,7 @@ function renderFooter() {
               class="inline-flex items-center"
             >
               <img
-                src="/img/templogo.png"
+                src="/public/img/templogo.png"
                 alt="Masterton Roofing"
                 class="h-8 w-auto"
               />

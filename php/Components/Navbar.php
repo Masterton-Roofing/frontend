@@ -7,7 +7,7 @@ function renderNavbar() {
 
     <!-- Logo -->
     <a href="/" class="flex items-center" id="logo-link">
-      <img src="/img/logo.png" alt="Masterton Roofing" class="h-12 md:h-16 w-auto" />
+      <img src="/public/img/logo.png" alt="Masterton Roofing" class="h-12 md:h-16 w-auto" />
     </a>
 
     <!-- Desktop Navigation -->

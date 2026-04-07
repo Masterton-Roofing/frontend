@@ -1,37 +1,72 @@
 <?php
-require_once __DIR__ . '/php/Layout/Main.php';
-require_once __DIR__ . '/php/Components/ServicesPreview.php';
+// Normalize URI
+$uri = rtrim(urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/');
+if (empty($uri)) $uri = '/';
 
-renderHeader("Welcome to Masterton Roofing");
-?>
+// Map clean URLs to PHP files
+$routes = [
+    '/' => '/home.php',
+    '/about' => '/about.php',
+    '/blog' => '/blog.php',
+    '/contact' => '/contact.php',
+    '/projects' => '/projects.php',
+    '/solutions' => '/solutions.php',
+    '/solutions/pvc' => '/solutions/pvc.php',
+    '/solutions/vcl' => '/solutions/vcl.php',
+    '/solutions/drone' => '/solutions/drone.php',
+    '/services/leak-detection' => '/solutions.php',
+    '/services/roof-surveys' => '/solutions.php',
+    '/services/addons' => '/solutions.php',
+];
 
-<!-- Hero section -->
-<section class="hero h-[80vh] md:h-screen bg-cover bg-center" style="background-image: url('/public/img/maz.jpg');">
-    <div class="flex items-center justify-center h-full bg-black/30 px-4">
-        <h1 class="header text-4xl md:text-5xl lg:text-6xl text-center text-white font-bold">Welcome to Masterton Roofing</h1>
-    </div>
-</section>
+// 1. Check if the URI matches our explicit routing table
+if (isset($routes[$uri])) {
+    $script = __DIR__ . $routes[$uri];
+    if (file_exists($script)) {
+        require_once $script;
+        exit;
+    }
+}
 
-<!-- About -->
-<section class="py-16 bg-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8">
-        <div class="w-full md:w-1/2 text-center md:text-left">
-            <h2 class="text-3xl font-bold mb-4">About Us</h2>
-            <p class="text-gray-700 mb-6">
-                Welcome to Masterton Roofing Limited! With 30+ years of experience in roofing the industry, our team is dedicated to delivering top-quality roofing solutions that stand the test of time.
-                We take pride in our workmanship, attention to detail, and commitment to customer satisfaction. From the initial consultation to the final inspection, we ensure every project is completed efficiently, safely, and to the maximum standards.
-                Trust us to provide you with a roof that not only looks great but also offers lasting protection for your home or business.
-            </p>
-        </div>
-        <div class="w-full md:w-1/2">
-            <img src="https://www.mastertonroofing.com/img/work/unnamed.jpg" alt="About us" class="rounded-lg shadow-lg w-full" />
-        </div>
-    </div>
-</section>
+// 2. Special case for blog slugs
+if (preg_match('#^/blog/([^/.]+)$#', $uri, $matches)) {
+    $_GET['slug'] = $matches[1];
+    require_once __DIR__ . '/blog.php';
+    exit;
+}
 
-<!-- Our Services Section -->
-<?php renderServicesPreview(); ?>
+// 3. Serve static files from the root and public/ subdirectories if they exist
+// We only serve if it's NOT a directory and it's NOT a PHP file
+if ($uri !== '/') {
+    $filePath = __DIR__ . $uri;
+    $publicFilePath = __DIR__ . '/public' . $uri;
+    
+    // Check root files (except .php)
+    if (file_exists($filePath) && !is_dir($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) !== 'php') {
+        return false;
+    }
+    
+    // Check public/ directory
+    if (file_exists($publicFilePath) && !is_dir($publicFilePath)) {
+        $ext = pathinfo($publicFilePath, PATHINFO_EXTENSION);
+        $mimeType = match ($ext) {
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'png' => 'image/png',
+            'jpg', 'jpeg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            'svg' => 'image/svg+xml',
+            'json' => 'application/json',
+            default => mime_content_type($publicFilePath),
+        };
+        
+        header("Content-Type: $mimeType");
+        readfile($publicFilePath);
+        exit;
+    }
+}
 
-<?php
-renderPageFooter();
-?>
+// 4. If nothing else matches, 404
+header("HTTP/1.0 404 Not Found");
+echo "<h1>404 Not Found</h1><p>The page you requested was not found.</p>";
+exit;

@@ -3,7 +3,7 @@ require_once __DIR__ . '/../php/Layout/SolutionPageBase.php';
 
 renderSolutionPageBase([
     'pageTitle' => "PVC Membrane Solutions - Masterton Roofing",
-    'heroImage' => "https://placehold.co/600x400",
+    'heroImage' => "/public/img/hero.jpg",
     'heroTitle' => "PVC Membrane - Solutions",
     'sectionTitle' => "Our PVC Roofing Solutions",
     'articles' => [

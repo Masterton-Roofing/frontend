@@ -82,10 +82,15 @@ function renderFooter() {
           </div>
         </div>
         <div class="flex flex-col justify-between pt-5 pb-10 border-t border-slate-700 sm:flex-row">
-          <p class="text-sm text-gray-100">
-            © Copyright 2026 Masterton Roofing Ltd. All rights reserved. Website
-            written by Ben House. Powered by <a class="hover:text-[#f2e599]" href="https://php.net">PHP</a>
-          </p>
+          <div>
+            <p class="text-sm text-gray-100">
+              © Copyright 2026 Masterton Roofing Ltd. All rights reserved. Website
+              written by Ben House. Powered by <a class="hover:text-[#f2e599]" href="https://php.net">PHP</a>
+            </p>
+            <p class="text-xs text-gray-400 mt-2">
+              Build: <?php echo shell_exec('git rev-parse --short HEAD') ?: 'unknown'; ?>
+            </p>
+          </div>
           <div class="flex items-center mt-4 space-x-4 sm:mt-0">
             <!-- Social icons (simplified) -->
             <a href="https://www.facebook.com/leeamasterton" class="text-gray-300 hover:text-[#f2e599]">Facebook</a>

@@ -1,25 +1,40 @@
 <?php
-function getGalleryImages($dir = 'public/images/gallery') {
-    if (!is_dir($dir)) {
-        return [];
-    }
+function getGalleryImagesWithMeta($dir = 'public/img/gallery/', $metaFile = 'content/gallery.json') {
+    $meta = [];
 
-    $files = scanDIr($dir);
-    $images = [];
+    if (file_exists($metaFile)) {
+        $json = file_get_contents($metaFile);
+        $metaData = json_decode($json, true);
 
-    foreach ($files as $file) {
-        if ($file === '.' || $file === '..' ) continue;
-
-        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-        if (in_arry($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
-            $images []= $file;
+        if (is_array($metaData)) {
+            // Check if it's a single object or an array of objects
+            if (isset($metaData['file'])) {
+                $meta[$metaData['file']] = $metaData['caption'] ?? '';
+            } else {
+                foreach ($metaData as $item) {
+                    if (isset($item['file'])) {
+                        $meta[$item['file']] = $item['caption'] ?? '';
+                    }
+                }
+            }
         }
     }
 
-    // Sort newest first
-    usort($images, function($a, $b) use ($dir) {
-        return filemtime($dir . $b) - filemtime($dir . $a);
-    });
+    $files = scandir($dir);
+    $images = [];
+
+    foreach ($files as $file) {
+        if ($file === '.' || $file === '..') continue;
+
+        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+        if (in_array($ext, ['jpg','jpeg','png','gif','webp'])) {
+            $images[] = [
+                'file' => $file,
+                'caption' => $meta[$file] ?? ''
+            ];
+        }
+    }
 
     return $images;
 }

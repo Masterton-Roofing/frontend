@@ -3,29 +3,16 @@
 $uri = rtrim(urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/');
 if (empty($uri)) $uri = '/';
 
-// Map clean URLs to PHP files
-$routes = [
-    '/' => '/home.php',
-    '/about' => '/about.php',
-    '/blog' => '/blog.php',
-    '/contact' => '/contact.php',
-    '/projects' => '/projects.php',
-    '/solutions' => '/solutions.php',
-    '/solutions/pvc' => '/solutions/pvc.php',
-    '/solutions/vcl' => '/solutions/vcl.php',
-    '/solutions/drone' => '/solutions/drone.php',
-    '/services/leak-detection' => '/solutions.php',
-    '/services/roof-surveys' => '/solutions.php',
-    '/services/addons' => '/solutions.php',
-];
+// 1. Check if the URI corresponds to a PHP file in the root or a subfolder
+if ($uri === '/') {
+    $script = __DIR__ . '/home.php';
+} else {
+    $script = __DIR__ . $uri . '.php';
+}
 
-// 1. Check if the URI matches our explicit routing table
-if (isset($routes[$uri])) {
-    $script = __DIR__ . $routes[$uri];
-    if (file_exists($script)) {
-        require_once $script;
-        exit;
-    }
+if (file_exists($script) && !is_dir($script)) {
+    require_once $script;
+    exit;
 }
 
 // 2. Special case for blog slugs

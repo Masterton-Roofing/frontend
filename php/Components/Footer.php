@@ -41,7 +41,7 @@ function renderFooter() {
           </div>
           <div class="grid grid-cols-2 gap-5 row-gap-8 lg:col-span-4 md:grid-cols-4">
             <div>
-              <p class="font-semibold tracking-wide text-teal-400">
+              <p class="font-semibold tracking-wide text-[#f2e599]">
                 Services
               </p>
               <ul class="mt-2 space-y-2">
@@ -52,7 +52,7 @@ function renderFooter() {
               </ul>
             </div>
             <div>
-              <p class="font-semibold tracking-wide text-teal-400">
+              <p class="font-semibold tracking-wide text-[#f2e599]">
                 Company
               </p>
               <ul class="mt-2 space-y-2">
@@ -63,7 +63,7 @@ function renderFooter() {
               </ul>
             </div>
             <div>
-              <p class="font-semibold tracking-wide text-teal-400">
+              <p class="font-semibold tracking-wide text-[#f2e599]">
                 Projects
               </p>
               <ul class="mt-2 space-y-2">
@@ -73,7 +73,7 @@ function renderFooter() {
               </ul>
             </div>
             <div>
-              <p class="font-semibold tracking-wide text-teal-400">Legal</p>
+              <p class="font-semibold tracking-wide text-[#f2e599]">Legal</p>
               <ul class="mt-2 space-y-2">
                 <li><a href="/" class="transition-colors duration-300 text-gray-300 hover:text-teal-400">Terms of Service</a></li>
                 <li><a href="/" class="transition-colors duration-300 text-gray-300 hover:text-teal-400">Privacy Policy</a></li>

@@ -24,7 +24,7 @@ renderHeader("Welcome to Masterton Roofing");
             </p>
         </div>
         <div class="w-full md:w-1/2">
-            <img src="https://www.mastertonroofing.com/img/work/unnamed.jpg" alt="About us" class="rounded-lg shadow-lg w-full" />
+            <img src="/public/img/vcl.jpg" alt="About us" class="rounded-lg shadow-lg w-full" />
         </div>
     </div>
 </section>

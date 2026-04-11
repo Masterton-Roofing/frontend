@@ -1,7 +1,7 @@
 <?php
 function renderNavbar() {
     ?>
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-slate-900 text-white shadow-xl">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#01597c] text-white shadow-xl">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex justify-between items-center h-20">
 
@@ -48,13 +48,13 @@ function renderNavbar() {
                 </div>
                 <div class="absolute top-0 left-full ml-1 w-64 opacity-0 invisible group-hover/services:visible group-hover/services:opacity-100 transition-all duration-200">
                   <div class="bg-slate-800 rounded-lg shadow-2xl border border-slate-700 overflow-hidden">
-                    <a href="/services/leak-detection" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition">
+                    <a href="/solutions/vcl" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition">
                       Leak Detection
                     </a>
-                    <a href="/services/roof-surveys" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition">
+                    <a href="/solutions/drone" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition">
                       Roof Surveys
                     </a>
-                    <a href="/services/addons" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition">
+                    <a href="/solutions" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition">
                       Add-ons
                     </a>
                   </div>
@@ -87,7 +87,7 @@ function renderNavbar() {
 <!-- Mobile Menu Overlay -->
 <div
   id="mobile-menu"
-  class="lg:hidden fixed inset-0 z-40 bg-slate-900 translate-x-full transition-transform duration-300 ease-in-out"
+  class="lg:hidden fixed inset-0 z-40 bg-[#01597c] translate-x-full transition-transform duration-300 ease-in-out"
   style="top: 80px"
 >
   <div class="flex flex-col p-6 space-y-4 h-full overflow-y-auto">
@@ -109,9 +109,9 @@ function renderNavbar() {
             <svg id="mobile-additional-icon" class="h-4 w-4 fill-current transition-transform duration-200" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
           </button>
           <div id="mobile-additional-menu" class="mt-1 ml-4 space-y-2 max-h-0 opacity-0 overflow-hidden transition-all duration-300">
-            <a href="/services/leak-detection" class="block py-2 text-gray-400 hover:text-white">Leak Detection</a>
-            <a href="/services/roof-surveys" class="block py-2 text-gray-400 hover:text-white">Roof Surveys</a>
-            <a href="/services/addons" class="block py-2 text-gray-400 hover:text-white">Add-ons</a>
+            <a href="/solutions/vcl" class="block py-2 text-gray-400 hover:text-white">Leak Detection</a>
+            <a href="/solutions/drone" class="block py-2 text-gray-400 hover:text-white">Roof Surveys</a>
+            <a href="/solutions" class="block py-2 text-gray-400 hover:text-white">Add-ons</a>
           </div>
         </div>
       </div>

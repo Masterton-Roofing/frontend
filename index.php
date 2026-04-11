@@ -1,31 +1,37 @@
 <?php
 // Normalize URI
-$uri = rtrim(urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/');
-if (empty($uri)) $uri = '/';
+$uri = urldecode(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH));
 
-// Map clean URLs to PHP files
-$routes = [
-    '/' => '/home.php',
-    '/about' => '/about.php',
-    '/blog' => '/blog.php',
-    '/contact' => '/contact.php',
-    '/projects' => '/projects.php',
-    '/solutions' => '/solutions.php',
-    '/solutions/pvc' => '/solutions/pvc.php',
-    '/solutions/vcl' => '/solutions/vcl.php',
-    '/solutions/drone' => '/solutions/drone.php',
-    '/services/leak-detection' => '/solutions.php',
-    '/services/roof-surveys' => '/solutions.php',
-    '/services/addons' => '/solutions.php',
-];
+// Support subfolder installations by stripping the base directory from the URI
+$scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+$basePath = rtrim(dirname($scriptName), '/\\');
+if ($basePath === DIRECTORY_SEPARATOR || $basePath === '.') {
+    $basePath = '';
+}
 
-// 1. Check if the URI matches our explicit routing table
-if (isset($routes[$uri])) {
-    $script = __DIR__ . $routes[$uri];
-    if (file_exists($script)) {
-        require_once $script;
-        exit;
-    }
+if ($basePath !== '' && strpos($uri, $basePath) === 0) {
+    $uri = substr($uri, strlen($basePath));
+}
+
+$uri = '/' . ltrim($uri, '/');
+if ($uri === '/') {
+    $uri = '/';
+} else {
+    $uri = rtrim($uri, '/');
+}
+
+// 1. Check if the URI corresponds to a PHP file in the root or a subfolder
+if ($uri === '/') {
+    $script = __DIR__ . DIRECTORY_SEPARATOR . 'home.php';
+} else {
+    // Map /solutions/pvc to [base]/solutions/pvc.php
+    $relPath = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $uri);
+    $script = __DIR__ . DIRECTORY_SEPARATOR . ltrim($relPath, DIRECTORY_SEPARATOR) . '.php';
+}
+
+if (file_exists($script) && !is_dir($script)) {
+    require_once $script;
+    exit;
 }
 
 // 2. Special case for blog slugs
@@ -38,17 +44,24 @@ if (preg_match('#^/blog/([^/.]+)$#', $uri, $matches)) {
 // 3. Serve static files from the root and public/ subdirectories if they exist
 // We only serve if it's NOT a directory and it's NOT a PHP file
 if ($uri !== '/') {
-    $filePath = __DIR__ . $uri;
-    $publicFilePath = __DIR__ . '/public' . $uri;
-    
-    // Check root files (except .php)
+    // Convert URI to a physical path relative to this script's directory
+    $relPath = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $uri);
+    $filePath = __DIR__ . DIRECTORY_SEPARATOR . ltrim($relPath, DIRECTORY_SEPARATOR);
+    $targetFile = null;
+
+    // Check if the URI already points to a file correctly
     if (file_exists($filePath) && !is_dir($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) !== 'php') {
-        return false;
+        $targetFile = $filePath;
+    } else {
+        // Try prepending /public (for cases like /vite.svg mapping to /public/vite.svg)
+        $publicFilePath = __DIR__ . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . ltrim($relPath, DIRECTORY_SEPARATOR);
+        if (file_exists($publicFilePath) && !is_dir($publicFilePath) && pathinfo($publicFilePath, PATHINFO_EXTENSION) !== 'php') {
+            $targetFile = $publicFilePath;
+        }
     }
-    
-    // Check public/ directory
-    if (file_exists($publicFilePath) && !is_dir($publicFilePath)) {
-        $ext = pathinfo($publicFilePath, PATHINFO_EXTENSION);
+
+    if ($targetFile) {
+        $ext = pathinfo($targetFile, PATHINFO_EXTENSION);
         $mimeType = match ($ext) {
             'css' => 'text/css',
             'js' => 'application/javascript',
@@ -57,11 +70,15 @@ if ($uri !== '/') {
             'gif' => 'image/gif',
             'svg' => 'image/svg+xml',
             'json' => 'application/json',
-            default => mime_content_type($publicFilePath),
+            'ico' => 'image/x-icon',
+            'webp' => 'image/webp',
+            'avif' => 'image/avif',
+            default => 'application/octet-stream',
         };
         
         header("Content-Type: $mimeType");
-        readfile($publicFilePath);
+        header("Content-Length: " . filesize($targetFile));
+        readfile($targetFile);
         exit;
     }
 }

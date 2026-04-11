@@ -89,6 +89,7 @@ function renderFooter() {
           <div class="flex items-center mt-4 space-x-4 sm:mt-0">
             <!-- Social icons (simplified) -->
             <a href="https://www.facebook.com/leeamasterton" class="text-gray-300 hover:text-teal-400">Facebook</a>
+             <a href="https://uk.linkedin.com/in/lee-masterton-43513811b" class="text-gray-300 hover:text-teal-400">LinkedIn</a>
           </div>
         </div>
       </div>

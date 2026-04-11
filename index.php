@@ -57,10 +57,13 @@ if ($uri !== '/') {
             'svg' => 'image/svg+xml',
             'json' => 'application/json',
             'ico' => 'image/x-icon',
-            default => (function_exists('mime_content_type') ? mime_content_type($targetFile) : 'application/octet-stream'),
+            'webp' => 'image/webp',
+            'avif' => 'image/avif',
+            default => 'application/octet-stream',
         };
         
         header("Content-Type: $mimeType");
+        header("Content-Length: " . filesize($targetFile));
         readfile($targetFile);
         exit;
     }

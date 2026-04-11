@@ -68,6 +68,7 @@ function renderNavbar() {
       <a href="/projects" class="text-gray-300 hover:text-white font-bold transition">Projects</a>
       <a href="/blog" class="text-gray-300 hover:text-white font-bold transition">Blog</a>
       <a href="/contact" class="text-gray-300 hover:text-white font-bold transition">Contact</a>
+      <a href="/gallery" class="text-gray-300 hover:text-white font-bold transition">Gallery</a>
     </div>
 
     <!-- Mobile Menu Button -->

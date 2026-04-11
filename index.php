@@ -83,7 +83,22 @@ if ($uri !== '/') {
     }
 }
 
-// 4. If nothing else matches, 404
+// 4. If nothing else matches, display Coming Soon page
 header("HTTP/1.0 404 Not Found");
-echo "<h1>404 Not Found</h1><p>The page you requested was not found.</p>";
+require_once __DIR__ . '/php/Layout/Main.php';
+renderHeader("Coming Soon | Masterton Roofing");
+?>
+<div class="flex flex-col items-center justify-center py-20 px-4 text-center">
+    <div class="max-w-2xl">
+        <h1 class="text-5xl font-extrabold text-bg-mr-blue mb-6">Coming Soon</h1>
+        <p class="text-xl text-gray-600 mb-10">
+            We're working hard to bring you this page. Please check back later!
+        </p>
+        <a href="/" class="inline-block bg-bg-mr-blue text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition shadow-lg">
+            Return Home
+        </a>
+    </div>
+</div>
+<?php
+renderPageFooter();
 exit;

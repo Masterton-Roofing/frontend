@@ -5,11 +5,16 @@ $uri = urldecode(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH));
 // Support subfolder installations by stripping the base directory from the URI
 $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
 $basePath = rtrim(dirname($scriptName), '/\\');
+if ($basePath === DIRECTORY_SEPARATOR || $basePath === '.') {
+    $basePath = '';
+}
+
 if ($basePath !== '' && strpos($uri, $basePath) === 0) {
     $uri = substr($uri, strlen($basePath));
 }
 
-if (empty($uri) || $uri === '/') {
+$uri = '/' . ltrim($uri, '/');
+if ($uri === '/') {
     $uri = '/';
 } else {
     $uri = rtrim($uri, '/');
@@ -20,7 +25,8 @@ if ($uri === '/') {
     $script = __DIR__ . DIRECTORY_SEPARATOR . 'home.php';
 } else {
     // Map /solutions/pvc to [base]/solutions/pvc.php
-    $script = __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, $uri) . '.php';
+    $relPath = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $uri);
+    $script = __DIR__ . DIRECTORY_SEPARATOR . ltrim($relPath, DIRECTORY_SEPARATOR) . '.php';
 }
 
 if (file_exists($script) && !is_dir($script)) {
@@ -39,8 +45,8 @@ if (preg_match('#^/blog/([^/.]+)$#', $uri, $matches)) {
 // We only serve if it's NOT a directory and it's NOT a PHP file
 if ($uri !== '/') {
     // Convert URI to a physical path relative to this script's directory
-    $physicalPath = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $uri);
-    $filePath = __DIR__ . $physicalPath;
+    $relPath = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $uri);
+    $filePath = __DIR__ . DIRECTORY_SEPARATOR . ltrim($relPath, DIRECTORY_SEPARATOR);
     $targetFile = null;
 
     // Check if the URI already points to a file correctly
@@ -48,7 +54,7 @@ if ($uri !== '/') {
         $targetFile = $filePath;
     } else {
         // Try prepending /public (for cases like /vite.svg mapping to /public/vite.svg)
-        $publicFilePath = __DIR__ . DIRECTORY_SEPARATOR . 'public' . $physicalPath;
+        $publicFilePath = __DIR__ . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . ltrim($relPath, DIRECTORY_SEPARATOR);
         if (file_exists($publicFilePath) && !is_dir($publicFilePath) && pathinfo($publicFilePath, PATHINFO_EXTENSION) !== 'php') {
             $targetFile = $publicFilePath;
         }

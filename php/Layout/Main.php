@@ -38,6 +38,48 @@ function renderHeader($title = "Masterton Roofing") {
         </style>
     </head>
     <body class="flex flex-col min-h-screen">
+        <div id="built-banner" class="hidden bg-bg-mr-blue text-white py-2 px-4 flex justify-between items-center text-sm font-medium sticky top-0 z-[60] border-b border-white/10">
+            <div class="flex-grow text-center">
+                <span><i class="fas fa-tools mr-2 text-text-mr-yellow"></i>This website is currently being built. Some features may be incomplete.</span>
+            </div>
+            <button onclick="dismissBanner()" class="ml-4 text-white hover:text-text-mr-yellow focus:outline-none" aria-label="Dismiss banner">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <script>
+            function updateNavPosition() {
+                const banner = document.getElementById('built-banner');
+                const nav = document.getElementById('main-nav');
+                const mobileMenu = document.getElementById('mobile-menu');
+                
+                if (banner && !banner.classList.contains('hidden')) {
+                    const bannerHeight = banner.offsetHeight;
+                    if (nav) nav.style.top = bannerHeight + 'px';
+                    if (mobileMenu) mobileMenu.style.top = (bannerHeight + 80) + 'px';
+                } else {
+                    if (nav) nav.style.top = '0px';
+                    if (mobileMenu) mobileMenu.style.top = '80px';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                if (!localStorage.getItem('banner_dismissed')) {
+                    const banner = document.getElementById('built-banner');
+                    banner.classList.remove('hidden');
+                    updateNavPosition();
+                    window.addEventListener('resize', updateNavPosition);
+                } else {
+                    updateNavPosition();
+                }
+            });
+
+            function dismissBanner() {
+                document.getElementById('built-banner').classList.add('hidden');
+                localStorage.setItem('banner_dismissed', 'true');
+                updateNavPosition();
+                window.removeEventListener('resize', updateNavPosition);
+            }
+        </script>
         <?php renderNavbar(); ?>
         <main class="flex-grow pt-20">
     <?php

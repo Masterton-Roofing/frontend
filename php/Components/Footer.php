@@ -1,9 +1,9 @@
 <?php
 function renderFooter() {
     ?>
-    <div class="relative mt-16 bg-gray-800">
+    <div class="relative mt-16 bg-[#01597c]">
       <svg
-        class="absolute top-0 w-full h-6 -mt-5 sm:-mt-10 sm:h-16 text-gray-800"
+        class="absolute top-0 w-full h-6 -mt-5 sm:-mt-10 sm:h-16 text-[#01597c]"
         preserveAspectRatio="none"
         viewBox="0 0 1440 54"
       >
@@ -81,7 +81,7 @@ function renderFooter() {
             </div>
           </div>
         </div>
-        <div class="flex flex-col justify-between pt-5 pb-10 border-t border-gray-700 sm:flex-row">
+        <div class="flex flex-col justify-between pt-5 pb-10 border-t border-slate-700 sm:flex-row">
           <p class="text-sm text-gray-100">
             © Copyright 2026 Masterton Roofing Ltd. All rights reserved. Website
             written by Ben House. Powered by <a href="https://php.net">PHP</a>

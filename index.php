@@ -1,6 +1,14 @@
 <?php
 // Normalize URI
-$uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+$uri = urldecode(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH));
+
+// Support subfolder installations by stripping the base directory from the URI
+$scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+$basePath = rtrim(dirname($scriptName), '/\\');
+if ($basePath !== '' && strpos($uri, $basePath) === 0) {
+    $uri = substr($uri, strlen($basePath));
+}
+
 if (empty($uri) || $uri === '/') {
     $uri = '/';
 } else {
@@ -9,9 +17,10 @@ if (empty($uri) || $uri === '/') {
 
 // 1. Check if the URI corresponds to a PHP file in the root or a subfolder
 if ($uri === '/') {
-    $script = __DIR__ . '/home.php';
+    $script = __DIR__ . DIRECTORY_SEPARATOR . 'home.php';
 } else {
-    $script = __DIR__ . $uri . '.php';
+    // Map /solutions/pvc to [base]/solutions/pvc.php
+    $script = __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, $uri) . '.php';
 }
 
 if (file_exists($script) && !is_dir($script)) {
@@ -29,19 +38,17 @@ if (preg_match('#^/blog/([^/.]+)$#', $uri, $matches)) {
 // 3. Serve static files from the root and public/ subdirectories if they exist
 // We only serve if it's NOT a directory and it's NOT a PHP file
 if ($uri !== '/') {
-    // If running via 'php -S', we might want to check if the file exists directly
-    // but the router script usually only gets called for files that DON'T exist 
-    // UNLESS it's configured to handle all requests.
-    
-    $filePath = __DIR__ . $uri;
+    // Convert URI to a physical path relative to this script's directory
+    $physicalPath = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $uri);
+    $filePath = __DIR__ . $physicalPath;
     $targetFile = null;
 
-    // Check if the URI already points to a public file correctly
+    // Check if the URI already points to a file correctly
     if (file_exists($filePath) && !is_dir($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) !== 'php') {
         $targetFile = $filePath;
     } else {
-        // If not, try prepending /public (for cases like /vite.svg mapping to /public/vite.svg)
-        $publicFilePath = __DIR__ . '/public' . $uri;
+        // Try prepending /public (for cases like /vite.svg mapping to /public/vite.svg)
+        $publicFilePath = __DIR__ . DIRECTORY_SEPARATOR . 'public' . $physicalPath;
         if (file_exists($publicFilePath) && !is_dir($publicFilePath) && pathinfo($publicFilePath, PATHINFO_EXTENSION) !== 'php') {
             $targetFile = $publicFilePath;
         }

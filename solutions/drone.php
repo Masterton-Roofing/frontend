@@ -3,7 +3,7 @@ require_once __DIR__ . '/../php/Layout/SolutionPageBase.php';
 
 renderSolutionPageBase([
     'pageTitle' => "Drone Surveys - Masterton Roofing",
-    'heroImage' => "https://placehold.co/600x400",
+    'heroImage' => "/public/img/maz.jpg",
     'heroTitle' => "Drone Footage - Solutions",
     'sectionTitle' => "Drone Surveys",
     'articles' => [

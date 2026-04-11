@@ -34,16 +34,17 @@ if ($uri !== '/') {
     // UNLESS it's configured to handle all requests.
     
     $filePath = __DIR__ . $uri;
-    $publicFilePath = __DIR__ . '/public' . $uri;
     $targetFile = null;
 
-    // Check root files (except .php)
+    // Check if the URI already points to a public file correctly
     if (file_exists($filePath) && !is_dir($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) !== 'php') {
         $targetFile = $filePath;
-    }
-    // Check public/ directory
-    elseif (file_exists($publicFilePath) && !is_dir($publicFilePath)) {
-        $targetFile = $publicFilePath;
+    } else {
+        // If not, try prepending /public (for cases like /vite.svg mapping to /public/vite.svg)
+        $publicFilePath = __DIR__ . '/public' . $uri;
+        if (file_exists($publicFilePath) && !is_dir($publicFilePath) && pathinfo($publicFilePath, PATHINFO_EXTENSION) !== 'php') {
+            $targetFile = $publicFilePath;
+        }
     }
 
     if ($targetFile) {

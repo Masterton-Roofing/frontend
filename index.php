@@ -1,7 +1,11 @@
 <?php
 // Normalize URI
-$uri = rtrim(urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/');
-if (empty($uri)) $uri = '/';
+$uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+if (empty($uri) || $uri === '/') {
+    $uri = '/';
+} else {
+    $uri = rtrim($uri, '/');
+}
 
 // 1. Check if the URI corresponds to a PHP file in the root or a subfolder
 if ($uri === '/') {
@@ -25,17 +29,25 @@ if (preg_match('#^/blog/([^/.]+)$#', $uri, $matches)) {
 // 3. Serve static files from the root and public/ subdirectories if they exist
 // We only serve if it's NOT a directory and it's NOT a PHP file
 if ($uri !== '/') {
+    // If running via 'php -S', we might want to check if the file exists directly
+    // but the router script usually only gets called for files that DON'T exist 
+    // UNLESS it's configured to handle all requests.
+    
     $filePath = __DIR__ . $uri;
     $publicFilePath = __DIR__ . '/public' . $uri;
-    
+    $targetFile = null;
+
     // Check root files (except .php)
     if (file_exists($filePath) && !is_dir($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) !== 'php') {
-        return false;
+        $targetFile = $filePath;
     }
-    
     // Check public/ directory
-    if (file_exists($publicFilePath) && !is_dir($publicFilePath)) {
-        $ext = pathinfo($publicFilePath, PATHINFO_EXTENSION);
+    elseif (file_exists($publicFilePath) && !is_dir($publicFilePath)) {
+        $targetFile = $publicFilePath;
+    }
+
+    if ($targetFile) {
+        $ext = pathinfo($targetFile, PATHINFO_EXTENSION);
         $mimeType = match ($ext) {
             'css' => 'text/css',
             'js' => 'application/javascript',
@@ -44,11 +56,12 @@ if ($uri !== '/') {
             'gif' => 'image/gif',
             'svg' => 'image/svg+xml',
             'json' => 'application/json',
-            default => mime_content_type($publicFilePath),
+            'ico' => 'image/x-icon',
+            default => (function_exists('mime_content_type') ? mime_content_type($targetFile) : 'application/octet-stream'),
         };
         
         header("Content-Type: $mimeType");
-        readfile($publicFilePath);
+        readfile($targetFile);
         exit;
     }
 }

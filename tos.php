@@ -12,7 +12,7 @@ renderHeader("Terms of Service | Masterton Roofing");
         <section class="mb-10">
             <h2 class="text-2xl font-semibold text-bg-mr-blue mb-4">1. Agreement to Terms</h2>
             <p class="text-gray-700 leading-relaxed">
-                By accessing our website at mastertonroofing.co.uk, you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws.
+                By accessing our website at mastertonroofing.com, you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws.
             </p>
         </section>
 

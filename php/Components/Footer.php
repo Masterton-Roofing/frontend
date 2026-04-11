@@ -67,16 +67,16 @@ function renderFooter() {
                 Projects
               </p>
               <ul class="mt-2 space-y-2">
-                <li><a href="/projects" class="transition-colors duration-300 text-gray-300 hover:text-teal-400">Recent Work</a></li>
-                <li><a href="/projects" class="transition-colors duration-300 text-gray-300 hover:text-teal-400">Case Studies</a></li>
-                <li><a href="/projects" class="transition-colors duration-300 text-gray-300 hover:text-teal-400">Testimonials</a></li>
+                <li><a href="/projects" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Recent Work</a></li>
+                <li><a href="/projects" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Case Studies</a></li>
+                <li><a href="/projects" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Testimonials</a></li>
               </ul>
             </div>
             <div>
               <p class="font-semibold tracking-wide text-[#f2e599]">Legal</p>
               <ul class="mt-2 space-y-2">
-                <li><a href="/" class="transition-colors duration-300 text-gray-300 hover:text-teal-400">Terms of Service</a></li>
-                <li><a href="/" class="transition-colors duration-300 text-gray-300 hover:text-teal-400">Privacy Policy</a></li>
+                <li><a href="/" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Terms of Service</a></li>
+                <li><a href="/" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Privacy Policy</a></li>
               </ul>
             </div>
           </div>
@@ -84,7 +84,7 @@ function renderFooter() {
         <div class="flex flex-col justify-between pt-5 pb-10 border-t border-slate-700 sm:flex-row">
           <p class="text-sm text-gray-100">
             © Copyright 2026 Masterton Roofing Ltd. All rights reserved. Website
-            written by Ben House. Powered by <a href="https://php.net">PHP</a>
+            written by Ben House. Powered by <a class="hover:text-[#f2e599]" href="https://php.net">PHP</a>
           </p>
           <div class="flex items-center mt-4 space-x-4 sm:mt-0">
             <!-- Social icons (simplified) -->

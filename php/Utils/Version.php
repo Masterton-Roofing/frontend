@@ -30,6 +30,14 @@ class Version {
             }
         }
 
+        // Fallback to git command (useful for dev) - Prioritize live git over stale composer metadata
+        if (function_exists('shell_exec')) {
+            $gitVersion = @shell_exec('git rev-parse HEAD');
+            if ($gitVersion) {
+                return trim($gitVersion);
+            }
+        }
+
         // Fallback to composer installed versions (useful for prod if deployed via composer)
         try {
             if (class_exists('\Composer\InstalledVersions')) {
@@ -42,14 +50,6 @@ class Version {
             }
         } catch (\Exception $e) {
             // Ignore errors from Composer
-        }
-
-        // Fallback to git command (useful for dev)
-        if (function_exists('shell_exec')) {
-            $gitVersion = @shell_exec('git rev-parse HEAD');
-            if ($gitVersion) {
-                return trim($gitVersion);
-            }
         }
 
         return null;

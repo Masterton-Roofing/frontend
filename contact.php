@@ -15,7 +15,7 @@ renderHeader("Contact Us - Masterton Roofing");
     </script>
 
 </head>
-<section class="hero h-[80vh] md:h-screen bg-cover bg-center" style="background-image: url('/public/img/.jpeg')">
+<section class="hero h-[80vh] md:h-screen bg-cover bg-center" style="background-image: url('/public/img/gallery/grosvenor main.jpg')">
     <div class="flex items-center justify-center h-full bg-black/30 px-4">
         <h1 class="header text-4xl md:text-5xl lg:text-6xl text-center text-white font-bold">Contact Us</h1>
     </div>

@@ -88,7 +88,16 @@ function renderFooter() {
               written by Ben House. Powered by <a class="hover:text-[#f2e599]" href="https://php.net">PHP</a>
             </p>
             <p class="text-xs text-gray-400 mt-2">
-              Build: <?php echo \App\Utils\Version::getBuildId(); ?>
+              <?php 
+                $buildId = \App\Utils\Version::getBuildId();
+                $commitUrl = \App\Utils\Version::getCommitUrl();
+                echo "Build: ";
+                if ($commitUrl) {
+                    echo "<a href=\"$commitUrl\" target=\"_blank\" class=\"hover:underline\">$buildId</a>";
+                } else {
+                    echo $buildId;
+                }
+              ?>
             </p>
           </div>
           <div class="flex items-center mt-4 space-x-4 sm:mt-0">

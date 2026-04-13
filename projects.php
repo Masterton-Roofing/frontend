@@ -6,7 +6,18 @@ $projects = json_decode($projects_json, true);
 
 renderHeader("Our Projects - Masterton Roofing");
 ?>
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CXBWH0G43P"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
+        gtag('config', 'G-CXBWH0G43P');
+    </script>
+
+</head>
 <div class="max-w-4xl mx-auto px-6 py-12">
     <h1 class="text-4xl font-bold mb-8 text-center text-slate-800">Our Projects</h1>
     <div class="space-y-8">

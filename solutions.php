@@ -7,7 +7,7 @@ renderHeader("Our Solutions - Masterton Roofing");
 
 <section
     class="hero h-[60vh] md:h-[80vh] bg-cover bg-center"
-    style="background-image: url('/public/img/maz.jpg')"
+    style="background-image: url('/public/img/gallery/weybridge terrace.jpg')"
 >
     <div class="flex items-center justify-center h-full bg-black/40 px-4">
         <h1 class="text-white text-4xl md:text-5xl font-bold text-center">

@@ -5,6 +5,19 @@ require_once __DIR__ . '/php/Components/ServicesPreview.php';
 renderHeader("Welcome to Masterton Roofing");
 ?>
 
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CXBWH0G43P"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-CXBWH0G43P');
+    </script>
+
+</head>
+
 <!-- Hero section -->
 <section class="hero h-[80vh] md:h-screen bg-cover bg-center" style="background-image: url('/public/img/hero.jpg');">
     <div class="flex items-center justify-center h-full bg-black/30 px-4">

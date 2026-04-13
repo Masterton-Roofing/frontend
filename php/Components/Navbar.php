@@ -118,9 +118,10 @@ function renderNavbar() {
     </div>
 
     <a href="/projects" class="text-xl font-bold text-gray-300 hover:text-white">Projects</a>
-    <a href="/blog" class="text-xl font-bold text-gray-300 hover:text-white">Blog</a>
+    <!-- <a href="/blog" class="text-xl font-bold text-gray-300 hover:text-white">Blog</a> TODO: Unhide when ready-->
     <a href="/contact" class="text-xl font-bold text-gray-300 hover:text-white">Contact</a>
-    <a href="/about" class="text-xl font-bold text-gray-300 hover:text-white">About</a>
+    <!-- <a href="/about" class="text-xl font-bold text-gray-300 hover:text-white">About</a> TODO: Unhide when ready-->
+      <a href="/gallery" class="text-xl font-bold text-gray-300 hover:text-white">Gallery</a>
   </div>
 </div>
 </nav>

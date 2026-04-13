@@ -21,7 +21,8 @@ class Version {
      * @return string|null
      */
     public static function getCommitHash() {
-        // First try to read from version.txt (useful for prod)
+        // First try to read from version.txt (definitive prod override)
+        // This file should be created by the deployment script/CI.
         $versionFile = __DIR__ . '/../../version.txt';
         if (file_exists($versionFile)) {
             $version = trim(file_get_contents($versionFile));
@@ -30,15 +31,19 @@ class Version {
             }
         }
 
-        // Fallback to git command (useful for dev) - Prioritize live git over stale composer metadata
-        if (function_exists('shell_exec')) {
-            $gitVersion = @shell_exec('git rev-parse HEAD');
+        // Second try: live git command (definitive dev)
+        // Check if .git directory exists before trying shell_exec to avoid overhead if it's missing (common in prod)
+        if (is_dir(__DIR__ . '/../../.git') && function_exists('shell_exec')) {
+            $gitVersion = @shell_exec('git rev-parse HEAD 2>/dev/null');
             if ($gitVersion) {
                 return trim($gitVersion);
             }
         }
 
-        // Fallback to composer installed versions (useful for prod if deployed via composer)
+        // Third try: composer.lock reference (fallback if composer install hasn't been run but lock is fresh)
+        // Not useful for the ROOT package hash, but good to have for dependency-based projects.
+
+        // Fourth try: fallback to composer installed versions (static metadata)
         try {
             if (class_exists('\Composer\InstalledVersions')) {
                 $rootPackage = \Composer\InstalledVersions::getRootPackage();

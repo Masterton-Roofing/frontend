@@ -66,7 +66,7 @@ function renderNavbar() {
       </div>
 
       <a href="/projects" class="text-gray-300 hover:text-white font-bold transition">Projects</a>
-      <a href="/blog" class="text-gray-300 hover:text-white font-bold transition">Blog</a>
+      <!-- <a href="/blog" class="text-gray-300 hover:text-white font-bold transition">Blog</a> (TODO: get me back up there)-->
       <a href="/contact" class="text-gray-300 hover:text-white font-bold transition">Contact</a>
       <a href="/gallery" class="text-gray-300 hover:text-white font-bold transition">Gallery</a>
     </div>

@@ -88,7 +88,7 @@ function renderFooter() {
               written by Ben House. Powered by <a class="hover:text-[#f2e599]" href="https://php.net">PHP</a>
             </p>
             <p class="text-xs text-gray-400 mt-2">
-              Build: <?php echo shell_exec('git rev-parse --short HEAD') ?: 'unknown'; ?>
+              Build: <?php echo \App\Utils\Version::getBuildId(); ?>
             </p>
           </div>
           <div class="flex items-center mt-4 space-x-4 sm:mt-0">

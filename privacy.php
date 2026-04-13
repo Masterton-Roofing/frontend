@@ -3,6 +3,19 @@ require_once __DIR__ . '/php/Layout/Main.php';
 renderHeader("Privacy Policy | Masterton Roofing");
 ?>
 
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CXBWH0G43P"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-CXBWH0G43P');
+    </script>
+
+</head>
+
 <div class="max-w-4xl mx-auto px-4 py-16">
     <div class="bg-white rounded-lg shadow-xl p-8 md:p-12 prose prose-blue max-w-none">
         <h1 class="text-3xl font-bold text-bg-mr-blue mb-8 border-b pb-4">Privacy Policy</h1>

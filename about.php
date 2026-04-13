@@ -4,6 +4,19 @@ require_once __DIR__ . '/php/Layout/Main.php';
 renderHeader("About Us - Masterton Roofing");
 ?>
 
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CXBWH0G43P"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-CXBWH0G43P');
+    </script>
+
+</head>
+
 <section class="hero h-[60vh] md:h-[70vh] bg-cover bg-center flex items-center" style="background-image: url('/img/work/unnamed.jpg');">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
         <div class="bg-black/40 p-12 rounded-3xl backdrop-blur-sm inline-block">

@@ -6,6 +6,19 @@ renderHeader("Gallery | Masterton Roofing");
 $images = getGalleryImagesWithMeta();
 ?>
 
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CXBWH0G43P"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-CXBWH0G43P');
+    </script>
+
+</head>
+
 <div class="max-w-7xl mx-auto px-4 py-12">
     <h1 class="text-4xl font-bold text-bg-mr-blue mb-8">Project Gallery</h1>
     

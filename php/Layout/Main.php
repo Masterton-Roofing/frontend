@@ -15,6 +15,16 @@ function renderHeader($title = "Masterton Roofing") {
         <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <script>
+            !function(b,e,t,r){
+                b[t]=b[t]||function(...args){(b[t].q=b[t].q||[]).push(args)};
+                b[t].l=+new Date;
+                var s=e.createElement('script'); s.async=1; s.crossOrigin='anonymous';
+                s.src='https://betterstack.net/b.js?t='+r;
+                (e.head||e.getElementsByTagName('head')[0]).appendChild(s);
+            }(window,document,'betterstack','iw6mnzXcUZb3S4mxRVYGESeP');
+            betterstack('init', { environment: 'production' });
+        </script>
+        <script>
             tailwind.config = {
                 theme: {
                     extend: {

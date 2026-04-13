@@ -41,7 +41,17 @@ class Version {
         }
 
         // Third try: composer.lock reference (fallback if composer install hasn't been run but lock is fresh)
-        // Not useful for the ROOT package hash, but good to have for dependency-based projects.
+        // This is specifically useful if the root package is managed by git but we are in a deployment
+        // where .git is removed, and version.txt wasn't generated.
+        $composerLock = __DIR__ . '/../../composer.lock';
+        if (file_exists($composerLock)) {
+            $lockData = json_decode(file_get_contents($composerLock), true);
+            // In some setups, the root package hash might be in a special field if using a plugin,
+            // or we might want to look at the content-hash as a last resort.
+            if (isset($lockData['content-hash'])) {
+                return $lockData['content-hash'];
+            }
+        }
 
         // Fourth try: fallback to composer installed versions (static metadata)
         try {

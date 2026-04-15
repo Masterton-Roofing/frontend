@@ -2,7 +2,7 @@
 require_once __DIR__ . '/php/Layout/Main.php';
 require_once __DIR__ . '/php/Components/ServicesPreview.php';
 
-renderHeader("Welcome to Masterton Roofing");
+renderHeader("Masterton Roofing - Home");
 ?>
 
 <head>

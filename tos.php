@@ -20,7 +20,7 @@ renderHeader("Terms of Service | Masterton Roofing");
     <div class="bg-white rounded-lg shadow-xl p-8 md:p-12 prose prose-blue max-w-none">
         <h1 class="text-3xl font-bold text-bg-mr-blue mb-8 border-b pb-4">Terms of Service</h1>
         
-        <p class="text-gray-600 mb-6 italic">Last Updated: April 11, 2026</p>
+        <p class="text-gray-600 mb-6 italic">Last Updated: April 15, 2026</p>
 
         <section class="mb-10">
             <h2 class="text-2xl font-semibold text-bg-mr-blue mb-4">1. Agreement to Terms</h2>
@@ -32,7 +32,7 @@ renderHeader("Terms of Service | Masterton Roofing");
         <section class="mb-10">
             <h2 class="text-2xl font-semibold text-bg-mr-blue mb-4">2. Use License</h2>
             <p class="text-gray-700 leading-relaxed mb-4">
-                Permission is granted to temporarily download one copy of the materials (information or software) on Masterton Roofing's website for personal, non-commercial transitory viewing only.
+                Permission is granted to temporarily download one copy of the materials (images, information or software) on Masterton Roofing's website for personal, non-commercial transitory viewing only.
             </p>
             <p class="text-gray-700 leading-relaxed mb-4">
                 This is the grant of a license, not a transfer of title, and under this license you may not:

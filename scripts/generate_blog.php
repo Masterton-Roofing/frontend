@@ -10,48 +10,48 @@ $postsDir = __DIR__ . '/../content/blog';
 $buildDir = __DIR__ . '/../blog';
 
 if (!is_dir($postsDir)) {
-    echo "No content/blog directory found.\n";
-    exit(1);
+  echo "No content/blog directory found.\n";
+  return;
 }
 
 if (!is_dir($buildDir)) {
-    mkdir($buildDir, 0755, true);
+  mkdir($buildDir, 0755, true);
 }
 
 $files = glob($postsDir . '/*.md');
 $posts = [];
 
 foreach ($files as $file) {
-    echo "Processing " . basename($file) . "...\n";
-    $slug = basename($file, '.md');
-    $object = YamlFrontMatter::parse(file_get_contents($file));
-    
-    $title = $object->matter('title');
-    $date = $object->matter('date');
-    $author = $object->matter('author') ?? 'Admin';
-    $image = $object->matter('image') ?? '';
-    $content = $parsedown->text($object->body());
-    
-    $postData = array_merge([
-        'slug' => $slug,
-        'title' => $title,
-        'date' => $date,
-        'description' => $object->matter('description'),
-        'author' => $author,
-        'image' => $image,
-    ], $object->matter());
-    
-    $posts[] = $postData;
+  echo "Processing " . basename($file) . "...\n";
+  $slug = basename($file, '.md');
+  $object = YamlFrontMatter::parse(file_get_contents($file));
 
-    // Generate blog/{slug}.php
-    $formattedDate = date('n/j/Y', strtotime($date));
-    $imageHtml = $image ? <<<HTML
+  $title = $object->matter('title');
+  $date = $object->matter('date');
+  $author = $object->matter('author') ?? 'Admin';
+  $image = $object->matter('image') ?? '';
+  $content = $parsedown->text($object->body());
+
+  $postData = array_merge([
+    'slug' => $slug,
+    'title' => $title,
+    'date' => $date,
+    'description' => $object->matter('description'),
+    'author' => $author,
+    'image' => $image,
+  ], $object->matter());
+
+  $posts[] = $postData;
+
+  // Generate blog/{slug}.php
+  $formattedDate = date('n/j/Y', strtotime($date));
+  $imageHtml = $image ? <<<HTML
         <div class="mb-8 overflow-hidden rounded-xl">
             <img src="{$image}" alt="{$title}" class="w-full h-auto object-cover max-h-[400px]" />
         </div>
 HTML : '';
 
-    $phpContent = <<<PHP
+  $phpContent = <<<PHP
 <?php
 require_once __DIR__ . '/../php/Layout/Main.php';
 renderHeader("{$title} - Masterton Roofing");
@@ -89,12 +89,12 @@ renderPageFooter();
 ?>
 PHP;
 
-    file_put_contents($buildDir . '/' . $slug . '.php', $phpContent);
+  file_put_contents($buildDir . '/' . $slug . '.php', $phpContent);
 }
 
 // Sort by date descending
-usort($posts, function($a, $b) {
-    return strtotime($b['date']) - strtotime($a['date']);
+usort($posts, function ($a, $b) {
+  return strtotime($b['date']) - strtotime($a['date']);
 });
 
 // Save posts metadata to content/blog_index.json

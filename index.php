@@ -1,4 +1,24 @@
 <?php
+// Auto-generate blog pages if any markdown file is newer than the blog_index.json
+$postsDir = __DIR__ . '/content/blog';
+$indexFile = __DIR__ . '/content/blog_index.json';
+$latestMd = 0;
+if (is_dir($postsDir)) {
+    foreach (glob($postsDir . '/*.md') as $file) {
+        $time = @filemtime($file);
+        if ($time > $latestMd) {
+            $latestMd = $time;
+        }
+    }
+}
+$indexTime = file_exists($indexFile) ? filemtime($indexFile) : 0;
+if ($latestMd > $indexTime) {
+    // Only capture output to prevent polluting the response
+    ob_start();
+    require __DIR__ . '/scripts/generate_blog.php';
+    ob_end_clean();
+}
+
 // Normalize URI
 $uri = urldecode(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH));
 

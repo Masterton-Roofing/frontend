@@ -35,11 +35,8 @@ if (file_exists($script) && !is_dir($script)) {
 }
 
 // 2. Special case for blog slugs
-if (preg_match('#^/blog/([^/.]+)$#', $uri, $matches)) {
-    $_GET['slug'] = $matches[1];
-    require_once __DIR__ . '/blog.php';
-    exit;
-}
+// Blog slugs are now generated as static PHP files under the `/blog` directory
+// and naturally fall into the static file routing below.
 
 // 3. Serve static files from the root and public/ subdirectories if they exist
 // We only serve if it's NOT a directory and it's NOT a PHP file
@@ -75,7 +72,7 @@ if ($uri !== '/') {
             'avif' => 'image/avif',
             default => 'application/octet-stream',
         };
-        
+
         header("Content-Type: $mimeType");
         header("Content-Length: " . filesize($targetFile));
         readfile($targetFile);
@@ -94,7 +91,8 @@ renderHeader("Coming Soon | Masterton Roofing");
         <p class="text-xl text-gray-600 mb-10">
             We're working hard to bring you this page. Please check back later!
         </p>
-        <a href="/" class="inline-block bg-bg-mr-blue text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition shadow-lg">
+        <a href="/"
+            class="inline-block bg-bg-mr-blue text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition shadow-lg">
             Return Home
         </a>
     </div>

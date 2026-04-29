@@ -24,7 +24,7 @@ renderHeader("Our Projects - Masterton Roofing");
         <?php foreach ($projects as $project): ?>
             <div class="w-full mx-auto mt-6">
                 <button
-                    onclick="toggleProject('project-<?php echo $project['id']; ?>', this)"
+                    onclick="toggleProject('project-<?php echo $project['id']; ?>', this, <?php echo json_encode($project['name']); ?>)"
                     class="w-full flex justify-between items-center px-4 py-3 bg-slate-800 text-white rounded-lg transition hover:bg-slate-700"
                 >
                     <span class="text-left"><?php echo $project['name']; ?></span>
@@ -51,14 +51,17 @@ renderHeader("Our Projects - Masterton Roofing");
 </div>
 
 <script>
-function toggleProject(id, btn) {
+function toggleProject(id, btn, projectName) {
     const content = document.getElementById(id);
     const span = btn.querySelector('span:last-child');
-    
+
     if (content.classList.contains('max-h-0')) {
         content.classList.remove('max-h-0', 'opacity-0');
         content.classList.add('max-h-[1000px]', 'opacity-100', 'mt-2');
         span.classList.add('rotate-180');
+        if (window.posthog) {
+            posthog.capture('project_expanded', { project_name: projectName });
+        }
     } else {
         content.classList.add('max-h-0', 'opacity-0');
         content.classList.remove('max-h-[1000px]', 'opacity-100', 'mt-2');

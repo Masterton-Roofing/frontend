@@ -1,0 +1,16 @@
+# We check in composer.lock for CI reproducibility and supply chain security.
+# Composer verifies package integrity hashes on install.
+# Run `composer update` to update dependencies explicitly.
+# composer.lock
+vendor
+composer.phar
+test/posthog.log
+/.vscode
+.phplint-cache
+.idea
+.phpunit.result.cache
+.phpunit.cache
+clover.xml
+xdebug.log
+.DS_Store
+.env

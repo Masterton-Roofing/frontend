@@ -1,0 +1,1049 @@
+<?php
+
+namespace PostHog;
+
+use Exception;
+use PostHog\Consumer\File;
+use PostHog\Consumer\ForkCurl;
+use PostHog\Consumer\LibCurl;
+use PostHog\Consumer\Socket;
+use Symfony\Component\Clock\Clock;
+
+const SIZE_LIMIT = 50_000;
+
+class Client
+{
+    private const CONSUMERS = [
+        "socket" => Socket::class,
+        "file" => File::class,
+        "fork_curl" => ForkCurl::class,
+        "lib_curl" => LibCurl::class,
+    ];
+
+
+    /**
+     * @var string
+     */
+    private $apiKey;
+
+    /**
+     * @var string
+     */
+    private $personalAPIKey;
+
+    /**
+     * @var integer
+     */
+    private $featureFlagsRequestTimeout;
+
+    /**
+     * Consumer object handles queueing and bundling requests to PostHog.
+     *
+     * @var Consumer
+     */
+    protected $consumer;
+
+    /**
+     * @var HttpClient
+     */
+    public $httpClient;
+
+    /**
+     * @var array
+     */
+    public $featureFlags;
+
+    /**
+     * @var array
+     */
+    public $groupTypeMapping;
+
+    /**
+     * @var array
+     */
+    public $cohorts;
+
+    /**
+     * @var array
+     */
+    public $featureFlagsByKey;
+
+    /**
+     * @var SizeLimitedHash
+     */
+    public $distinctIdsFeatureFlagsReported;
+
+    /**
+     * @var string|null Cached ETag for feature flag definitions
+     */
+    private $flagsEtag;
+
+    /**
+     * @var bool
+     */
+    private $debug;
+
+    /**
+     * @var array<string, mixed>
+     */
+    private $options;
+
+    /**
+     * Create a new posthog object with your app's API key
+     * key
+     *
+     * @param string $apiKey
+     * @param array $options array of consumer options [optional]
+     * @param HttpClient|null $httpClient
+     */
+    public function __construct(
+        string $apiKey,
+        array $options = [],
+        ?HttpClient $httpClient = null,
+        ?string $personalAPIKey = null,
+        bool $loadFeatureFlags = true,
+    ) {
+        $this->apiKey = trim($apiKey);
+        $this->personalAPIKey = StringNormalizer::normalizeOptional($personalAPIKey);
+        $this->options = $options;
+        $this->debug = $options["debug"] ?? false;
+        $this->options['host'] = StringNormalizer::normalizeHost($options['host'] ?? null);
+        if ($this->apiKey === '') {
+            error_log('[PostHog][Client] apiKey is empty after trimming whitespace; check your project API key');
+        }
+        $Consumer = self::CONSUMERS[$options["consumer"] ?? "lib_curl"];
+        $this->consumer = new $Consumer($this->apiKey, $this->options, $httpClient);
+        $this->httpClient = $httpClient !== null ? $httpClient : new HttpClient(
+            $this->options['host'],
+            $options['ssl'] ?? true,
+            (int) ($options['maximum_backoff_duration'] ?? 10000),
+            false,
+            $options["debug"] ?? false,
+            null,
+            (int) ($options['timeout'] ?? 10000)
+        );
+        $this->featureFlagsRequestTimeout = (int) ($options['feature_flag_request_timeout_ms'] ?? 3000);
+        $this->featureFlags = [];
+        $this->groupTypeMapping = [];
+        $this->cohorts = [];
+        $this->featureFlagsByKey = [];
+        $this->distinctIdsFeatureFlagsReported = new SizeLimitedHash(SIZE_LIMIT);
+        $this->flagsEtag = null;
+
+        ExceptionCapture::configure($this, $options['error_tracking'] ?? []);
+
+        // Populate featureflags and grouptypemapping if possible
+        if (
+            count($this->featureFlags) == 0
+            && !is_null($this->personalAPIKey)
+            && $loadFeatureFlags
+        ) {
+            $this->loadFlags();
+        }
+    }
+
+    public function __destruct()
+    {
+        $this->consumer->__destruct();
+    }
+
+    /**
+     * Captures a user action
+     *
+     * @param array $message
+     * @return bool whether the capture call succeeded
+     */
+    public function capture(array $message)
+    {
+        $message = $this->message($message);
+        $message["type"] = "capture";
+
+        if (array_key_exists('$groups', $message)) {
+            $message["properties"]['$groups'] = $message['$groups'];
+        }
+
+        if (array_key_exists("send_feature_flags", $message) && $message["send_feature_flags"]) {
+            $extraProperties = [];
+            $flags = [];
+
+            if (count($this->featureFlags) != 0) {
+                // Local evaluation is enabled, flags are loaded, so try and get all flags
+                // we can without going to the server.
+                $flags = $this->getAllFlags($message["distinct_id"], $message["groups"], [], [], true);
+            } else {
+                $flags = $this->fetchFeatureVariants($message["distinct_id"], $message["groups"]);
+            }
+
+            // Add all feature variants to event
+            foreach ($flags as $flagKey => $flagValue) {
+                $extraProperties[sprintf('$feature/%s', $flagKey)] = $flagValue;
+            }
+            // Add all feature flag keys that aren't false to $active_feature_flags
+            // decide v2 does this automatically, but we need it for when we upgrade to v3
+            $extraProperties['$active_feature_flags'] = array_keys(array_filter($flags, function ($flagValue) {
+                return $flagValue !== false;
+            }));
+
+            $message["properties"] = array_merge($extraProperties, $message["properties"]);
+        }
+
+
+        return $this->consumer->capture($message);
+    }
+
+    /**
+     * Captures an exception as a PostHog error tracking event.
+     *
+     * @param \Throwable|string $exception The exception to capture or a plain string message
+     * @param string|null $distinctId User ID; a random UUID is used when omitted (no person profile created)
+     * @param array $additionalProperties Extra properties merged into the event
+     * @return bool whether the capture call succeeded
+     */
+    public function captureException(
+        \Throwable|string $exception,
+        ?string $distinctId = null,
+        array $additionalProperties = []
+    ): bool {
+        $noDistinctIdProvided = $distinctId === null;
+        if ($noDistinctIdProvided) {
+            $distinctId = Uuid::v4();
+        }
+
+        $errorTrackingConfig = $this->options['error_tracking'] ?? [];
+        $maxFrames = max(0, (int) ($errorTrackingConfig['max_frames'] ?? 20));
+
+        $exceptionList = ExceptionPayloadBuilder::buildExceptionList($exception, $maxFrames);
+        if (empty($exceptionList)) {
+            return false;
+        }
+
+        $properties = array_merge(
+            $additionalProperties,
+            [
+                '$exception_list' => $exceptionList,
+                '$exception_handled' => ExceptionPayloadBuilder::getPrimaryHandled($exceptionList),
+            ]
+        );
+
+        if ($noDistinctIdProvided) {
+            $properties['$process_person_profile'] = false;
+        }
+
+        return $this->capture([
+            'distinctId'  => $distinctId,
+            'event'       => '$exception',
+            'properties'  => $properties,
+        ]);
+    }
+
+    /**
+     * Tags properties about the user.
+     *
+     * @param array $message
+     * @return bool whether the identify call succeeded
+     */
+    public function identify(array $message)
+    {
+        if (isset($message['properties'])) {
+            $message['$set'] = $message['properties'];
+        }
+
+        $message = $this->message($message);
+        $message["type"] = "identify";
+        $message["event"] = '$identify';
+
+        return $this->consumer->identify($message);
+    }
+
+    /**
+     * decide if the feature flag is enabled for this distinct id.
+     *
+     * @param string $key
+     * @param string $distinctId
+     * @param array $groups
+     * @param array $personProperties
+     * @param array $groupProperties
+     * @return bool
+     * @throws Exception
+     */
+    public function isFeatureEnabled(
+        string $key,
+        string $distinctId,
+        array $groups = array(),
+        array $personProperties = array(),
+        array $groupProperties = array(),
+        bool $onlyEvaluateLocally = false,
+        bool $sendFeatureFlagEvents = true
+    ): null | bool {
+        $result = $this->getFeatureFlag(
+            $key,
+            $distinctId,
+            $groups,
+            $personProperties,
+            $groupProperties,
+            $onlyEvaluateLocally,
+            $sendFeatureFlagEvents
+        );
+
+        if (is_null($result)) {
+            return $result;
+        } else {
+            return boolval($result);
+        }
+    }
+
+    /**
+     * get the feature flag value for this distinct id.
+     *
+     * @param string $key
+     * @param string $distinctId
+     * @param array $groups
+     * @param array $personProperties
+     * @param array $groupProperties
+     * @return bool | string
+     * @throws Exception
+     */
+    public function getFeatureFlag(
+        string $key,
+        string $distinctId,
+        array $groups = array(),
+        array $personProperties = array(),
+        array $groupProperties = array(),
+        bool $onlyEvaluateLocally = false,
+        bool $sendFeatureFlagEvents = true
+    ): null | bool | string {
+        $result = $this->getFeatureFlagResult(
+            $key,
+            $distinctId,
+            $groups,
+            $personProperties,
+            $groupProperties,
+            $onlyEvaluateLocally,
+            $sendFeatureFlagEvents
+        );
+
+        return $result?->getValue();
+    }
+
+    /**
+     * Get the feature flag result including value and payload.
+     *
+     * This is the recommended method for getting feature flag data as it returns
+     * both the flag value and payload in a single call, while properly tracking analytics.
+     *
+     * @param string $key
+     * @param string $distinctId
+     * @param array $groups
+     * @param array $personProperties
+     * @param array $groupProperties
+     * @param bool $onlyEvaluateLocally
+     * @param bool $sendFeatureFlagEvents
+     * @return FeatureFlagResult|null
+     * @throws Exception
+     */
+    public function getFeatureFlagResult(
+        string $key,
+        string $distinctId,
+        array $groups = array(),
+        array $personProperties = array(),
+        array $groupProperties = array(),
+        bool $onlyEvaluateLocally = false,
+        bool $sendFeatureFlagEvents = true
+    ): ?FeatureFlagResult {
+        [$personProperties, $groupProperties] = $this->addLocalPersonAndGroupProperties(
+            $distinctId,
+            $groups,
+            $personProperties,
+            $groupProperties
+        );
+        $result = null;
+        $payload = null;
+        $featureFlagError = null;
+
+        foreach ($this->featureFlags as $flag) {
+            if ($flag["key"] == $key) {
+                try {
+                    $result = $this->computeFlagLocally(
+                        $flag,
+                        $distinctId,
+                        $groups,
+                        $personProperties,
+                        $groupProperties
+                    );
+                } catch (RequiresServerEvaluationException $e) {
+                    $result = null;
+                } catch (InconclusiveMatchException $e) {
+                    $result = null;
+                } catch (Exception $e) {
+                    $result = null;
+                    error_log("[PostHog][Client] Error while computing variant:" . $e->getMessage());
+                }
+            }
+        }
+
+        $flagWasEvaluatedLocally = !is_null($result);
+        $requestId = null;
+        $evaluatedAt = null;
+        $flagDetail = null;
+
+        if (!$flagWasEvaluatedLocally && !$onlyEvaluateLocally) {
+            try {
+                $response = $this->fetchFlagsResponse($distinctId, $groups, $personProperties, $groupProperties);
+                $errors = [];
+
+                if (isset($response['errorsWhileComputingFlags']) && $response['errorsWhileComputingFlags']) {
+                    $errors[] = FeatureFlagError::ERRORS_WHILE_COMPUTING_FLAGS;
+                }
+
+                $requestId = isset($response['requestId']) ? $response['requestId'] : null;
+                $evaluatedAt = isset($response['evaluatedAt']) ? $response['evaluatedAt'] : null;
+                $rawFlag = $response['flags'][$key] ?? null;
+                $flagDetail = ($rawFlag !== null && !($rawFlag['failed'] ?? false))
+                    ? $rawFlag
+                    : null;
+                $featureFlags = $response['featureFlags'] ?? [];
+                if (array_key_exists($key, $featureFlags)) {
+                    $result = $featureFlags[$key];
+                } else {
+                    $errors[] = FeatureFlagError::FLAG_MISSING;
+                    $result = null;
+                }
+
+                // Extract payload from response
+                $rawPayload = $response['featureFlagPayloads'][$key] ?? null;
+                if ($rawPayload !== null) {
+                    $payload = json_decode($rawPayload, true);
+                }
+
+                if (!empty($errors)) {
+                    $featureFlagError = implode(',', $errors);
+                }
+            } catch (HttpException $e) {
+                error_log("[PostHog][Client] Unable to get feature variants: " . $e->getMessage());
+                switch ($e->getErrorType()) {
+                    case HttpException::QUOTA_LIMITED:
+                        $featureFlagError = FeatureFlagError::QUOTA_LIMITED;
+                        break;
+                    case HttpException::TIMEOUT:
+                        $featureFlagError = FeatureFlagError::TIMEOUT;
+                        break;
+                    case HttpException::CONNECTION_ERROR:
+                        $featureFlagError = FeatureFlagError::CONNECTION_ERROR;
+                        break;
+                    case HttpException::API_ERROR:
+                        $featureFlagError = FeatureFlagError::apiError($e->getStatusCode());
+                        break;
+                    default:
+                        $featureFlagError = FeatureFlagError::UNKNOWN_ERROR;
+                }
+                $result = null;
+            } catch (Exception $e) {
+                error_log("[PostHog][Client] Unable to get feature variants: " . $e->getMessage());
+                $featureFlagError = FeatureFlagError::UNKNOWN_ERROR;
+                $result = null;
+            }
+        }
+
+        if ($sendFeatureFlagEvents && !$this->distinctIdsFeatureFlagsReported->contains($key, $distinctId)) {
+            $properties = [
+                '$feature_flag' => $key,
+                '$feature_flag_response' => $result,
+            ];
+
+            if (!is_null($requestId)) {
+                $properties['$feature_flag_request_id'] = $requestId;
+            }
+
+            if (!is_null($evaluatedAt)) {
+                $properties['$feature_flag_evaluated_at'] = $evaluatedAt;
+            }
+
+            if (!is_null($flagDetail)) {
+                $properties['$feature_flag_id'] = $flagDetail['metadata']['id'];
+                $properties['$feature_flag_version'] = $flagDetail['metadata']['version'];
+                $properties['$feature_flag_reason'] = $flagDetail['reason']['description'];
+            }
+
+            if (!is_null($featureFlagError)) {
+                $properties['$feature_flag_error'] = $featureFlagError;
+            }
+
+            $this->capture([
+                "properties" => $properties,
+                "distinct_id" => $distinctId,
+                "event" => '$feature_flag_called',
+                '$groups' => $groups
+            ]);
+            $this->distinctIdsFeatureFlagsReported->add($key, $distinctId);
+        }
+
+        if (is_null($result)) {
+            return null;
+        }
+
+        // Determine enabled and variant from result
+        if (is_bool($result)) {
+            return new FeatureFlagResult($key, $result, null, $payload);
+        } else {
+            return new FeatureFlagResult($key, true, $result, $payload);
+        }
+    }
+
+    /**
+     * @deprecated Use `getFeatureFlagResult()` instead which properly tracks the feature flag call,
+     * and includes both the flag value and payload in a single method.
+     *
+     * @param string $key
+     * @param string $distinctId
+     * @param array $groups
+     * @param array $personProperties
+     * @param array $groupProperties
+     * @return mixed
+     */
+    public function getFeatureFlagPayload(
+        string $key,
+        string $distinctId,
+        array $groups = array(),
+        array $personProperties = array(),
+        array $groupProperties = array(),
+    ): mixed {
+        $result = $this->getFeatureFlagResult(
+            $key,
+            $distinctId,
+            $groups,
+            $personProperties,
+            $groupProperties,
+            false,
+            false
+        );
+
+        return $result?->getPayload();
+    }
+
+    /**
+     * get the feature flag value for this distinct id.
+     *
+     * @param string $distinctId
+     * @param array $groups
+     * @param array $personProperties
+     * @param array $groupProperties
+     * @return array
+     * @throws Exception
+     */
+    public function getAllFlags(
+        string $distinctId,
+        array $groups = array(),
+        array $personProperties = array(),
+        array $groupProperties = array(),
+        bool $onlyEvaluateLocally = false
+    ): array {
+        [$personProperties, $groupProperties] = $this->addLocalPersonAndGroupProperties(
+            $distinctId,
+            $groups,
+            $personProperties,
+            $groupProperties
+        );
+        $response = [];
+        $fallbackToFlags = false;
+
+        if (count($this->featureFlags) > 0) {
+            foreach ($this->featureFlags as $flag) {
+                try {
+                    $response[$flag['key']] = $this->computeFlagLocally(
+                        $flag,
+                        $distinctId,
+                        $groups,
+                        $personProperties,
+                        $groupProperties
+                    );
+                } catch (RequiresServerEvaluationException $e) {
+                    $fallbackToFlags = true;
+                } catch (InconclusiveMatchException $e) {
+                    $fallbackToFlags = true;
+                } catch (Exception $e) {
+                    $fallbackToFlags = true;
+                    error_log("[PostHog][Client] Error while computing variant:" . $e->getMessage());
+                }
+            }
+        } else {
+            $fallbackToFlags = true;
+        }
+
+        if ($fallbackToFlags && !$onlyEvaluateLocally) {
+            try {
+                $featureFlags = $this->fetchFeatureVariants($distinctId, $groups, $personProperties, $groupProperties);
+                $response = array_merge($response, $featureFlags);
+            } catch (Exception $e) {
+                error_log("[PostHog][Client] Unable to get feature variants:" . $e->getMessage());
+            }
+        }
+
+        return $response;
+    }
+
+    private function computeFlagLocally(
+        array $featureFlag,
+        string $distinctId,
+        array $groups = array(),
+        array $personProperties = array(),
+        array $groupProperties = array()
+    ): bool | string {
+        // Create evaluation cache for flag dependencies
+        $evaluationCache = [];
+
+        if ($featureFlag["ensure_experience_continuity"] ?? false) {
+            throw new InconclusiveMatchException("Flag has experience continuity enabled");
+        }
+
+        if (!$featureFlag["active"]) {
+            return false;
+        }
+
+        $flagFilters = $featureFlag["filters"] ?? [];
+        $aggregationGroupTypeIndex = $flagFilters["aggregation_group_type_index"] ?? null;
+
+        if (!is_null($aggregationGroupTypeIndex)) {
+            $groupName = $this->groupTypeMapping[strval($aggregationGroupTypeIndex)] ?? null;
+
+            if (is_null($groupName)) {
+                throw new InconclusiveMatchException("Flag has unknown group type index");
+            }
+
+            if (!array_key_exists($groupName, $groups)) {
+                return false;
+            }
+
+            $focusedGroupProperties = $groupProperties[$groupName];
+            return FeatureFlag::matchFeatureFlagProperties(
+                $featureFlag,
+                $groups[$groupName],
+                $focusedGroupProperties,
+                $this->cohorts,
+                $this->featureFlagsByKey,
+                $evaluationCache
+            );
+        } else {
+            return FeatureFlag::matchFeatureFlagProperties(
+                $featureFlag,
+                $distinctId,
+                $personProperties,
+                $this->cohorts,
+                $this->featureFlagsByKey,
+                $evaluationCache
+            );
+        }
+    }
+
+
+    /**
+     * @param string $distinctId
+     * @param array $groups
+     * @return array of feature flags
+     * @throws Exception
+     */
+    public function fetchFeatureVariants(
+        string $distinctId,
+        array $groups = [],
+        array $personProperties = [],
+        array $groupProperties = []
+    ): array {
+        $response = $this->fetchFlagsResponse($distinctId, $groups, $personProperties, $groupProperties);
+        return $response['featureFlags'] ?? [];
+    }
+
+    /**
+     * @param string $distinctId
+     * @param array $groups
+     * @return array of feature flags
+     * @throws Exception
+     */
+    private function fetchFlagsResponse(
+        string $distinctId,
+        array $groups = [],
+        array $personProperties = [],
+        array $groupProperties = []
+    ): ?array {
+        return $this->flags($distinctId, $groups, $personProperties, $groupProperties);
+    }
+
+    /**
+     * @throws Exception
+     */
+
+    public function loadFlags()
+    {
+        $response = $this->localFlags();
+
+        // Handle 304 Not Modified - flags haven't changed, skip processing.
+        // On 304, we preserve the existing ETag unless the server sends a new one.
+        // This handles edge cases like server restarts where the server may send
+        // a refreshed ETag even though the content hasn't changed.
+        if ($response->isNotModified()) {
+            if ($response->getEtag()) {
+                $this->flagsEtag = $response->getEtag();
+            }
+            if ($this->debug) {
+                error_log("[PostHog][Client] Flags not modified (304), using cached data");
+            }
+            return;
+        }
+
+        $responseCode = $response->getResponseCode();
+        if ($responseCode !== 200) {
+            error_log("[PostHog][Client] Failed to load feature flags (HTTP $responseCode): " . $response->getResponse());
+            return;
+        }
+
+        $payload = json_decode($response->getResponse(), true);
+
+        if ($payload && array_key_exists("detail", $payload)) {
+            throw new Exception($payload["detail"]);
+        }
+
+        // On 200 responses, always update ETag (even if null) since we're replacing
+        // the cached flag data. A null ETag means the server doesn't support caching.
+        $this->flagsEtag = $response->getEtag();
+
+        $this->featureFlags = $payload['flags'] ?? [];
+        $this->groupTypeMapping = $payload['group_type_mapping'] ?? [];
+        $this->cohorts = $payload['cohorts'] ?? [];
+
+        // Build flags by key dictionary for dependency resolution
+        $this->featureFlagsByKey = [];
+        foreach ($this->featureFlags as $flag) {
+            $this->featureFlagsByKey[$flag['key']] = $flag;
+        }
+    }
+
+
+    public function localFlags(): HttpResponse
+    {
+        $headers = [
+            // Send user agent in the form of {library_name}/{library_version} as per RFC 7231.
+            "User-Agent: posthog-php/" . PostHog::VERSION,
+            "Authorization: Bearer " . $this->personalAPIKey
+        ];
+
+        // Add If-None-Match header if we have a cached ETag
+        if ($this->flagsEtag !== null) {
+            $headers[] = "If-None-Match: " . $this->flagsEtag;
+        }
+
+        return $this->httpClient->sendRequest(
+            '/flags/definitions?send_cohorts&token=' . $this->apiKey,
+            null,
+            $headers,
+            [
+                'includeEtag' => true
+            ]
+        );
+    }
+
+    /**
+     * Get the current cached ETag for feature flag definitions
+     *
+     * @return string|null
+     */
+    public function getFlagsEtag(): ?string
+    {
+        return $this->flagsEtag;
+    }
+
+    /**
+     * Normalize feature flags response to ensure consistent format.
+     * Decodes JSON, checks for quota limits, and transforms v4 to v3 format.
+     *
+     * @param string $response The raw JSON response
+     * @return array The normalized response
+     * @throws HttpException On invalid JSON or quota limit
+     */
+    private function normalizeFeatureFlags(string $response): array
+    {
+        $decoded = json_decode($response, true);
+
+        if (!is_array($decoded)) {
+            throw new HttpException(
+                HttpException::API_ERROR,
+                0,
+                "Invalid JSON response"
+            );
+        }
+
+        // Check for quota limit in response body
+        if (
+            isset($decoded['quotaLimited'])
+            && is_array($decoded['quotaLimited'])
+            && in_array('feature_flags', $decoded['quotaLimited'])
+        ) {
+            throw new HttpException(
+                HttpException::QUOTA_LIMITED,
+                0,
+                "Feature flags quota limited"
+            );
+        }
+
+        if (isset($decoded['flags']) && !empty($decoded['flags'])) {
+            // This is a v4 response, we need to transform it to a v3 response for backwards compatibility
+            $transformedFlags = [];
+            $transformedPayloads = [];
+            foreach ($decoded['flags'] as $key => $flag) {
+                // Skip flags that failed evaluation to avoid overwriting cached values
+                if (isset($flag['failed']) && $flag['failed']) {
+                    continue;
+                }
+                if ($flag['variant'] !== null) {
+                    $transformedFlags[$key] = $flag['variant'];
+                } else {
+                    $transformedFlags[$key] = $flag['enabled'] ?? false;
+                }
+                if (isset($flag['metadata']['payload'])) {
+                    $transformedPayloads[$key] = $flag['metadata']['payload'];
+                }
+            }
+            $decoded['featureFlags'] = $transformedFlags;
+            $decoded['featureFlagPayloads'] = $transformedPayloads;
+        }
+
+        return $decoded;
+    }
+
+    /**
+     * Fetch feature flags from the PostHog API.
+     *
+     * @param string $distinctId The user's distinct ID
+     * @param array $groups Group identifiers
+     * @param array $personProperties Person properties for flag evaluation
+     * @param array $groupProperties Group properties for flag evaluation
+     * @return array The normalized feature flags response
+     * @throws HttpException On network errors, API errors, or quota limits
+     */
+    public function flags(
+        string $distinctId,
+        array $groups = array(),
+        array $personProperties = [],
+        array $groupProperties = []
+    ): array {
+        $payload = array(
+            'api_key' => $this->apiKey,
+            'distinct_id' => $distinctId,
+        );
+
+        if (!empty($groups)) {
+            $payload["groups"] = $groups;
+        }
+
+        if (!empty($personProperties)) {
+            $payload["person_properties"] = $personProperties;
+        }
+
+        if (!empty($groupProperties)) {
+            $payload["group_properties"] = $groupProperties;
+        }
+
+        $httpResponse = $this->httpClient->sendRequest(
+            '/flags/?v=2',
+            json_encode($payload),
+            [
+                // Send user agent in the form of {library_name}/{library_version} as per RFC 7231.
+                "User-Agent: posthog-php/" . PostHog::VERSION,
+            ],
+            [
+                "shouldRetry" => false,
+                "timeout" => $this->featureFlagsRequestTimeout
+            ]
+        );
+
+        $responseCode = $httpResponse->getResponseCode();
+        $curlErrno = $httpResponse->getCurlErrno();
+
+        if ($responseCode === 0) {
+            // CURLE_OPERATION_TIMEDOUT (28)
+            // https://curl.se/libcurl/c/libcurl-errors.html
+            if ($curlErrno === 28) {
+                throw new HttpException(
+                    HttpException::TIMEOUT,
+                    0,
+                    "Request timed out"
+                );
+            }
+            // Consider everything else a connection error
+            // CURLE_COULDNT_RESOLVE_HOST (6)
+            // CURLE_COULDNT_CONNECT (7)
+            // CURLE_WEIRD_SERVER_REPLY (8)
+            // etc.
+            throw new HttpException(
+                HttpException::CONNECTION_ERROR,
+                0,
+                "Connection error (curl errno: {$curlErrno})"
+            );
+        }
+
+        if ($responseCode >= 400) {
+            throw new HttpException(
+                HttpException::API_ERROR,
+                $responseCode,
+                "API error: HTTP {$responseCode}"
+            );
+        }
+
+        return $this->normalizeFeatureFlags($httpResponse->getResponse());
+    }
+
+    /**
+     * Aliases from one user id to another
+     *
+     * @param array $message
+     * @return boolean whether the alias call succeeded
+     */
+    public function alias(array $message)
+    {
+        $message = $this->message($message);
+        $message["type"] = "alias";
+        $message["event"] = '$create_alias';
+
+        $message['properties']['distinct_id'] = $message['distinct_id'];
+        $message['properties']['alias'] = $message['alias'];
+
+        $message['distinct_id'] = null;
+        unset($message['alias']);
+
+        return $this->consumer->alias($message);
+    }
+
+    /**
+     * Queue a raw (prepared) message
+     *
+     * @param array $message
+     * @return mixed whether the identify call succeeded
+     */
+    public function raw(array $message)
+    {
+        return $this->consumer->enqueue($message);
+    }
+
+    /**
+     * Flush any async consumers
+     * @return boolean true if flushed successfully
+     */
+    public function flush()
+    {
+        if (method_exists($this->consumer, 'flush')) {
+            return $this->consumer->flush();
+        }
+
+        return true;
+    }
+
+    /**
+     * Formats a timestamp by making sure it is set
+     * and converting it to iso8601.
+     *
+     * The timestamp can be time in seconds `time()` or `microseconds(true)`.
+     * any other input is considered an error and the method will return a new date.
+     *
+     * Note: php's date() "u" format (for microseconds) has a bug in it
+     * it always shows `.000` for microseconds since `date()` only accepts
+     * ints, so we have to construct the date ourselves if microtime is passed.
+     *
+     * @param $ts
+     * @return false|string
+     */
+    private function formatTime($ts)
+    {
+        // time()
+        if (null == $ts || !$ts) {
+            $ts = Clock::get()->now()->getTimestamp();
+        }
+        if (false !== filter_var($ts, FILTER_VALIDATE_INT)) {
+            return date("c", (int)$ts);
+        }
+
+        // anything else try to strtotime the date.
+        if (false === filter_var($ts, FILTER_VALIDATE_FLOAT)) {
+            if (is_string($ts)) {
+                return date("c", strtotime($ts));
+            }
+
+            return date("c", Clock::get()->now()->getTimestamp());
+        }
+
+        // fix for floatval casting in send.php
+        $parts = explode(".", (string)$ts);
+        if (!isset($parts[1])) {
+            return date("c", (int)$parts[0]);
+        }
+
+        // microtime(true)
+        $sec = (int)$parts[0];
+        $usec = (int)$parts[1];
+        $fmt = sprintf("Y-m-d\\TH:i:s%sP", $usec);
+
+        return date($fmt, (int)$sec);
+    }
+
+    /**
+     * Add common fields to the given `message`
+     *
+     * @param array $msg
+     * @return array
+     */
+    private function message($msg)
+    {
+        if (!isset($msg["properties"])) {
+            $msg["properties"] = array();
+        }
+
+        $msg["library"] = 'posthog-php';
+        $msg["library_version"] = PostHog::VERSION;
+        $msg["library_consumer"] = $this->consumer->getConsumer();
+
+        $msg["properties"]['$lib'] = 'posthog-php';
+        $msg["properties"]['$lib_version'] = PostHog::VERSION;
+        $msg["properties"]['$lib_consumer'] = $this->consumer->getConsumer();
+
+        if (isset($msg["distinctId"])) {
+            $msg["distinct_id"] = $msg["distinctId"];
+            unset($msg["distinctId"]);
+        }
+
+        if (isset($msg["sendFeatureFlags"])) {
+            $msg["send_feature_flags"] = $msg["sendFeatureFlags"];
+            unset($msg["sendFeatureFlags"]);
+        }
+
+        if (!isset($msg["groups"])) {
+            $msg["groups"] = [];
+        }
+
+        if (!isset($msg["timestamp"])) {
+            $msg["timestamp"] = null;
+        }
+        $msg["timestamp"] = $this->formatTime($msg["timestamp"]);
+
+        return $msg;
+    }
+
+    private function addLocalPersonAndGroupProperties(
+        string $distinctId,
+        array $groups,
+        array $personProperties,
+        array $groupProperties
+    ): array {
+        $allPersonProperties = array_merge(
+            ["distinct_id" => $distinctId],
+            $personProperties
+        );
+
+        $allGroupProperties = [];
+        if (count($groups) > 0) {
+            foreach ($groups as $groupName => $groupValue) {
+                $allGroupProperties[$groupName] = array_merge(
+                    ["\$group_key" => $groupValue],
+                    $groupProperties[$groupName] ?? []
+                );
+            }
+        }
+
+        return [$allPersonProperties, $allGroupProperties];
+    }
+}

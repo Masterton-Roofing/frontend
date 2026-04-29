@@ -104,6 +104,7 @@ if ($uri !== '/') {
 header("HTTP/1.0 404 Not Found");
 require_once __DIR__ . '/php/Layout/Main.php';
 renderHeader("Coming Soon | Masterton Roofing");
+
 ?>
 <div class="flex flex-col items-center justify-center py-20 px-4 text-center">
     <div class="max-w-2xl">

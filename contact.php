@@ -94,6 +94,16 @@ renderHeader("Contact Us - Masterton Roofing");
     </div>
 </section>
 
+<script>
+    document.querySelector('form[action*="formspree"]').addEventListener('submit', function () {
+        if (window.posthog) {
+            posthog.capture('contact_form_submitted', {
+                form_action: 'formspree',
+            });
+        }
+    });
+</script>
+
 <?php
 renderPageFooter();
 ?>

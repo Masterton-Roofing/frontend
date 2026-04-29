@@ -3,7 +3,48 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../Components/Navbar.php';
 require_once __DIR__ . '/../Components/Footer.php';
 
+// Load .env file and initialize PostHog once
+(function () {
+    static $initialized = false;
+    if ($initialized) return;
+    $initialized = true;
+
+    $envFile = __DIR__ . '/../../.env';
+    if (file_exists($envFile)) {
+        foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+            if (str_starts_with(trim($line), '#') || !str_contains($line, '=')) continue;
+            [$key, $val] = explode('=', $line, 2);
+            $key = trim($key);
+            $val = trim($val);
+            if (!isset($_ENV[$key])) {
+                $_ENV[$key] = $val;
+                putenv("$key=$val");
+            }
+        }
+    }
+
+    $apiKey = $_ENV['POSTHOG_API_KEY'] ?? getenv('POSTHOG_API_KEY');
+    $host   = $_ENV['POSTHOG_HOST']    ?? getenv('POSTHOG_HOST');
+
+    if ($apiKey) {
+        \PostHog\PostHog::init($apiKey, ['host' => $host]);
+    }
+
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (empty($_SESSION['posthog_distinct_id'])) {
+        $_SESSION['posthog_distinct_id'] = 'anon-' . bin2hex(random_bytes(16));
+    }
+})();
+
+function posthogDistinctId(): string {
+    return $_SESSION['posthog_distinct_id'] ?? 'anonymous';
+}
+
 function renderHeader($title = "Masterton Roofing") {
+    $phToken = $_ENV['POSTHOG_API_KEY'] ?? getenv('POSTHOG_API_KEY') ?? '';
+    $phHost  = $_ENV['POSTHOG_HOST']    ?? getenv('POSTHOG_HOST')    ?? '';
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -24,6 +65,15 @@ function renderHeader($title = "Masterton Roofing") {
             }(window,document,'betterstack','iw6mnzXcUZb3S4mxRVYGESeP');
             betterstack('init', { environment: 'production' });
         </script>
+        <?php if ($phToken): ?>
+        <script>
+            !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.people.toString(20)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId captureException".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+            posthog.init('<?php echo htmlspecialchars($phToken, ENT_QUOTES); ?>', {
+                api_host: '<?php echo htmlspecialchars($phHost, ENT_QUOTES); ?>',
+                person_profiles: 'identified_only'
+            });
+        </script>
+        <?php endif; ?>
         <script>
             tailwind.config = {
                 theme: {
@@ -61,7 +111,7 @@ function renderHeader($title = "Masterton Roofing") {
                 const banner = document.getElementById('built-banner');
                 const nav = document.getElementById('main-nav');
                 const mobileMenu = document.getElementById('mobile-menu');
-                
+
                 if (banner && !banner.classList.contains('hidden')) {
                     const bannerHeight = banner.offsetHeight;
                     if (nav) nav.style.top = bannerHeight + 'px';

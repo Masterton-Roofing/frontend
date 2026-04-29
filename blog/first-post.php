@@ -1,5 +1,17 @@
 <?php
 require_once __DIR__ . '/../php/Layout/Main.php';
+
+\PostHog\PostHog::capture([
+    'distinctId' => posthogDistinctId(),
+    'event'      => 'blog_post_viewed',
+    'properties' => [
+        'post_title'  => 'Masterton Roofing: Your Experts in PVC Membrane',
+        'post_author' => 'The MR Team',
+        'post_date'   => '2024-03-20',
+        'post_slug'   => 'first-post',
+    ],
+]);
+
 renderHeader("Masterton Roofing: Your Experts in PVC Membrane - Masterton Roofing");
 ?>
 <article class="bg-white py-12 px-4 sm:px-6 lg:px-8">

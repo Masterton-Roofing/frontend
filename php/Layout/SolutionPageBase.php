@@ -8,6 +8,8 @@ function renderSolutionPageBase($params)
         throw new Exception("Missing required parameters for renderSolutionPageBase");
     }
 
+    renderHeader($params['pageTitle']);
+    
     \PostHog\PostHog::capture([
         'distinctId' => posthogDistinctId(),
         'event'      => 'solution_viewed',
@@ -16,8 +18,6 @@ function renderSolutionPageBase($params)
             'page_title'     => $params['pageTitle'],
         ],
     ]);
-
-    renderHeader($params['pageTitle']);
     ?>
 
     <!-- Hero Section -->

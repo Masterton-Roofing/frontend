@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../php/Layout/Main.php';
 
+renderHeader("Masterton Roofing: Your Experts in PVC Membrane - Masterton Roofing");
+
 \PostHog\PostHog::capture([
     'distinctId' => posthogDistinctId(),
     'event'      => 'blog_post_viewed',
@@ -11,8 +13,6 @@ require_once __DIR__ . '/../php/Layout/Main.php';
         'post_slug'   => 'first-post',
     ],
 ]);
-
-renderHeader("Masterton Roofing: Your Experts in PVC Membrane - Masterton Roofing");
 ?>
 <article class="bg-white py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-3xl mx-auto">

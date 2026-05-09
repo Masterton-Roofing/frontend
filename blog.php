@@ -13,6 +13,8 @@
 <?php
 require_once __DIR__ . '/php/Layout/Main.php';
 
+renderHeader("Blog - Masterton Roofing");
+
 // Read statically generated index
 $posts = [];
 $indexFile = __DIR__ . '/content/blog_index.json';
@@ -27,8 +29,6 @@ if (file_exists($indexFile)) {
         'post_count' => count($posts),
     ],
 ]);
-
-renderHeader("Blog - Masterton Roofing");
 ?>
 <div class="bg-white py-12">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -22,13 +22,7 @@ if (file_exists($indexFile)) {
   $posts = json_decode(file_get_contents($indexFile), true) ?: [];
 }
 
-\PostHog\PostHog::capture([
-    'distinctId' => posthogDistinctId(),
-    'event'      => 'blog_listing_viewed',
-    'properties' => [
-        'post_count' => count($posts),
-    ],
-]);
+// PostHog capture removed
 ?>
 <div class="bg-white py-12">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

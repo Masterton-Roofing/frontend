@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../Components/Navbar.php';
 require_once __DIR__ . '/../Components/Footer.php';
 
-// Load .env file and initialize PostHog once
+// Load .env file
 (function () {
     static $initialized = false;
     if ($initialized) return;
@@ -23,35 +23,16 @@ require_once __DIR__ . '/../Components/Footer.php';
         }
     }
 
-    $apiKey = $_ENV['POSTHOG_API_KEY'] ?? getenv('POSTHOG_API_KEY');
-    $host   = $_ENV['POSTHOG_HOST']    ?? getenv('POSTHOG_HOST');
-
-    if ($apiKey) {
-        \PostHog\PostHog::init($apiKey, ['host' => $host]);
-    }
-
-    // Register shutdown function to flush PostHog events
-    register_shutdown_function(function () use ($apiKey) {
-        if ($apiKey) {
-            \PostHog\PostHog::flush();
-        }
-    });
-
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
-    if (empty($_SESSION['posthog_distinct_id'])) {
-        $_SESSION['posthog_distinct_id'] = 'anon-' . bin2hex(random_bytes(16));
-    }
 })();
 
-function posthogDistinctId(): string {
-    return $_SESSION['posthog_distinct_id'] ?? 'anonymous';
-}
+// PostHog removed: no distinct id helper
 
 function renderHeader($title = "Masterton Roofing") {
-    $phToken = $_ENV['POSTHOG_API_KEY'] ?? getenv('POSTHOG_API_KEY') ?? '';
-    $phHost  = $_ENV['POSTHOG_HOST']    ?? getenv('POSTHOG_HOST')    ?? '';
+    $phToken = '';
+    $phHost  = '';
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -72,17 +53,7 @@ function renderHeader($title = "Masterton Roofing") {
             }(window,document,'betterstack','iw6mnzXcUZb3S4mxRVYGESeP');
             betterstack('init', { environment: 'production' });
         </script>
-        <?php if ($phToken): ?>
-        <script>
-            !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.people.toString(20)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId captureException".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-            posthog.init('<?php echo htmlspecialchars($phToken, ENT_QUOTES); ?>', {
-                api_host: '<?php echo htmlspecialchars($phHost, ENT_QUOTES); ?>',
-                person_profiles: 'identified_only',
-                capture_pageview: true,
-                capture_pageleave: true
-            });
-        </script>
-        <?php endif; ?>
+        <?php /* PostHog removed: client snippet omitted */ ?>
         <script>
             tailwind.config = {
                 theme: {

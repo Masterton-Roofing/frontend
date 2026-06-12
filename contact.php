@@ -95,21 +95,7 @@ renderHeader("Contact Us - Masterton Roofing");
 </section>
 
 <script>
-    document.querySelector('form[action*="formspree"]').addEventListener('submit', function (e) {
-        if (window.posthog) {
-            e.preventDefault();
-            var form = this;
-            posthog.capture('contact_form_submitted', {
-                form_action: 'formspree',
-            }, function() {
-                form.submit();
-            });
-            // Fallback in case PostHog callback doesn't fire
-            setTimeout(function() {
-                form.submit();
-            }, 1000);
-        }
-    });
+    // PostHog integration removed: form submits normally to Formspree
 </script>
 
 <?php

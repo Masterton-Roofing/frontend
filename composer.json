@@ -7,9 +7,8 @@
       }
     },
     "require": {
-        "spatie/yaml-front-matter": "^2.1",
-        "erusev/parsedown": "^1.7",
-        "posthog/posthog-php": "^4.2"
+      "spatie/yaml-front-matter": "^2.1",
+      "erusev/parsedown": "^1.7"
     },
     "authors": [
         {

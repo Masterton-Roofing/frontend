@@ -59,9 +59,7 @@ function toggleProject(id, btn, projectName) {
         content.classList.remove('max-h-0', 'opacity-0');
         content.classList.add('max-h-[1000px]', 'opacity-100', 'mt-2');
         span.classList.add('rotate-180');
-        if (window.posthog) {
-            posthog.capture('project_expanded', { project_name: projectName });
-        }
+        // PostHog capture removed
     } else {
         content.classList.add('max-h-0', 'opacity-0');
         content.classList.remove('max-h-[1000px]', 'opacity-100', 'mt-2');

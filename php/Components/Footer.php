@@ -85,7 +85,7 @@ function renderFooter() {
           <div>
             <p class="text-sm text-gray-100">
               © Copyright 2026 Masterton Roofing Ltd. All rights reserved. Website
-              written by Ben House. Powered by <a class="hover:text-[#f2e599]" href="https://php.net">PHP</a>
+              written by <a href="https://meowcat.site">Ben House.</a> Powered by <a class="hover:text-[#f2e599]" href="https://php.net">PHP</a>
             </p>
             <p class="text-xs text-gray-400 mt-2">
               <?php 

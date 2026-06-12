@@ -9,15 +9,22 @@ function renderSolutionPageBase($params)
     }
 
     renderHeader($params['pageTitle']);
-    
-    \PostHog\PostHog::capture([
-        'distinctId' => posthogDistinctId(),
-        'event'      => 'solution_viewed',
-        'properties' => [
-            'solution_title' => $params['heroTitle'],
-            'page_title'     => $params['pageTitle'],
-        ],
-    ]);
+
+    $posthogApiKey = $_ENV['POSTHOG_API_KEY'] ?? getenv('POSTHOG_API_KEY');
+    if (!empty($posthogApiKey)) {
+        try {
+            \PostHog\PostHog::capture([
+                'distinctId' => function_exists('posthogDistinctId') ? posthogDistinctId() : 'anonymous',
+                'event'      => 'solution_viewed',
+                'properties' => [
+                    'solution_title' => $params['heroTitle'],
+                    'page_title'     => $params['pageTitle'],
+                ],
+            ]);
+        } catch (\Exception $e) {
+            error_log('PostHog capture failed: ' . $e->getMessage());
+        }
+    }
     ?>
 
     <!-- Hero Section -->

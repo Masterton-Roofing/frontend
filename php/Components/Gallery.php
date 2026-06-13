@@ -31,7 +31,7 @@ function getGalleryImagesWithMeta($dir = 'public/img/gallery/', $metaFile = 'con
         if (in_array($ext, ['jpg','jpeg','png','gif','webp'])) {
             $images[] = [
                 'file' => $file,
-                'caption' => $meta[$file] ?? ''
+                'caption' => $meta[$file] ?? pathinfo($file, PATHINFO_FILENAME)
             ];
         }
     }

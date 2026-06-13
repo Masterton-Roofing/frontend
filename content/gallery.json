@@ -26,16 +26,19 @@
   {
     "file": "MILLBROOK TESCOS 1.jpeg",
     "caption": "Millbrook Tesco",
-    "date": "2026-06-13"
+    "date": "2026-06-13",
+    "tags": ["work", "roofing"]
   },
   {
     "file": "WOODCOTE VALLEY 1.jpeg",
     "caption": "Woodcote Valley",
-    "date": "2026-06-13"
+    "date": "2026-06-13",
+    "tags": ["work", "roofing"]
   },
   {
     "file": "LEEDS 3.jpg",
     "caption": "Leeds",
-    "date": "2026-06-13""
+    "date": "2026-06-13",
+    "tags": ["work", "roofing"]
   }
 ]

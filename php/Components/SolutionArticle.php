@@ -35,6 +35,25 @@ function renderSolutionArticle($params) {
                 <h3 class="text-xl font-semibold mt-4 mb-2">About</h3>
                 <p class="text-gray-700 mb-4"><?php echo $about; ?></p>
 
+                <?php if (!empty($params['video']) || !empty($params['videoEmbed'])): ?>
+                    <div class="mb-6">
+                        <?php if (!empty($params['video'])): ?>
+                            <?php $videoUrl = htmlspecialchars($params['video']); ?>
+                            <div class="w-full rounded overflow-hidden bg-black">
+                                <video controls preload="metadata" class="w-full max-h-[60vh]">
+                                    <source src="<?php echo $videoUrl; ?>" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        <?php else: /* videoEmbed provided */ ?>
+                            <?php $embed = $params['videoEmbed']; ?>
+                            <div class="relative" style="padding-top:56.25%">
+                                <iframe data-src="<?php echo htmlspecialchars($embed); ?>" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="absolute inset-0 w-full h-full"></iframe>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
                 <h3 class="text-xl font-semibold mb-2">Specifications</h3>
                 <p class="text-gray-700 mb-6 whitespace-pre-line"><?php echo $specs; ?></p>
 
@@ -64,15 +83,23 @@ if (typeof toggleArticle !== 'function') {
         const text = btn.querySelector('.btn-text');
         
         if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+            // collapse
             content.style.maxHeight = '0px';
             content.style.opacity = '0';
             arrow.style.transform = 'rotate(0deg)';
             text.textContent = 'Read more';
+            // pause any videos inside
+            const vids = content.querySelectorAll('video');
+            vids.forEach(v => { try { v.pause(); } catch(e){} });
         } else {
-            content.style.maxHeight = '2000px';
+            // expand
+            content.style.maxHeight = content.scrollHeight + 'px';
             content.style.opacity = '1';
             arrow.style.transform = 'rotate(180deg)';
             text.textContent = 'Hide details';
+            // autoplay muted videos if present
+            const vids = content.querySelectorAll('video');
+            vids.forEach(v => { try { v.muted = true; v.play().catch(()=>{}); } catch(e){} });
         }
     }
 }

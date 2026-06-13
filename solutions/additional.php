@@ -2,8 +2,8 @@
 require_once __DIR__ . '/../php/Layout/SolutionPageBase.php';
 
 renderSolutionPageBase([
-    'pageTitle' => "Drone Surveys - Masterton Roofing",
-    'heroImage' => "/public/img/gallery/APPLE 1.jpg",
+    'pageTitle' => " - Masterton Roofing",
+    'heroImage' => "",
     'heroTitle' => "Drone Footage - Solutions",
     'sectionTitle' => "Drone Surveys",
     'articles' => [
@@ -11,8 +11,7 @@ renderSolutionPageBase([
             'title' => "Drone Surveys",
             'blurb' => "High-tech aerial inspections for precise roof assessment without the need for scaffolding.",
             'about' => "Our drone surveys provide a safe and cost-effective way to inspect roofs of any height or complexity. Using high-resolution cameras can complete video footage with zoomed in photos which can identify potential leaks, damage, and debris without setting foot on the roof.",
-            'images' => [],
-            'video' => "done.MP4"
+            'images' => []
         ]
     ]
 ]);

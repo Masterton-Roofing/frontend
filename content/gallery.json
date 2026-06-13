@@ -20,7 +20,12 @@
   {
     "file": "weybridge terrace.jpg",
     "caption": "Weybridge Terrace",
-    "tags": ["work", "roofing"],
+    "tags": [ "work", "roofing" ],
     "date": "2026-04-14"
-  }
+  },
+  {
+    "file": "MILLBROOK TESCOS 1.jpeg",
+    "caption": "Millbrook Tesco",
+    "date": "2026-06-13"
+  },
 ]

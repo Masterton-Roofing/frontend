@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-# Pre-commit hook: regenerate sitemap and add it to the commit if changed
-# Ensure PHP is available in PATH
-php scripts/generate_sitemap.php
-# If sitemap.xml was modified, add it to the commit
-if [ -n "$(git status --porcelain sitemap.xml)" ]; then
-  git add sitemap.xml
-fi
-exit 0

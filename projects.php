@@ -53,17 +53,25 @@ renderHeader("Our Projects - Masterton Roofing");
 <script>
 function toggleProject(id, btn, projectName) {
     const content = document.getElementById(id);
-    const span = btn.querySelector('span:last-child');
+    const spans = btn.querySelectorAll('span');
+    const caret = spans[spans.length - 1];
 
-    if (content.classList.contains('max-h-0')) {
+    // Use inline maxHeight instead of adding arbitrary Tailwind classes that may not be present
+    if (!content) return;
+    const isCollapsed = content.style.maxHeight === '' || content.style.maxHeight === '0px' || content.classList.contains('max-h-0');
+    if (isCollapsed) {
+        // expand
         content.classList.remove('max-h-0', 'opacity-0');
-        content.classList.add('max-h-[1000px]', 'opacity-100', 'mt-2');
-        span.classList.add('rotate-180');
-        // PostHog capture removed
+        content.classList.add('opacity-100', 'mt-2');
+        content.style.maxHeight = content.scrollHeight + 'px';
+        // rotate caret
+        if (caret) caret.style.transform = 'rotate(180deg)';
     } else {
+        // collapse
+        content.style.maxHeight = '0px';
+        content.classList.remove('opacity-100', 'mt-2');
         content.classList.add('max-h-0', 'opacity-0');
-        content.classList.remove('max-h-[1000px]', 'opacity-100', 'mt-2');
-        span.classList.remove('rotate-180');
+        if (caret) caret.style.transform = '';
     }
 }
 </script>

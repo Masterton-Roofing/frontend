@@ -86,14 +86,18 @@ function renderFooter() {
               written by <a href="https://meowcat.site">Ben House.</a> Powered by <a class="hover:text-[#f2e599]" href="https://php.net">PHP</a>
             </p>
             <p class="text-xs text-gray-400 mt-2">
-              <?php 
+              <?php
                 $buildId = \App\Utils\Version::getBuildId();
                 $commitUrl = \App\Utils\Version::getCommitUrl();
-                echo "Build: ";
-                if ($commitUrl) {
-                    echo "<a href=\"$commitUrl\" target=\"_blank\" class=\"hover:underline\">$buildId</a>";
-                } else {
-                    echo $buildId;
+                if ($buildId) {
+                    $short = htmlspecialchars(substr($buildId, 0, 7), ENT_QUOTES, 'UTF-8');
+                    $full = htmlspecialchars($buildId, ENT_QUOTES, 'UTF-8');
+                    if ($commitUrl) {
+                        $href = htmlspecialchars($commitUrl, ENT_QUOTES, 'UTF-8');
+                        echo 'Version: <a href="' . $href . '" target="_blank" title="Commit ' . $full . '" class="hover:underline">' . $short . '</a>';
+                    } else {
+                        echo 'Version: ' . $short;
+                    }
                 }
               ?>
             </p>

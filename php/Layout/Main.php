@@ -34,10 +34,24 @@ function renderHeader($title = "Masterton Roofing", $description = null, $canoni
     $phToken = '';
     $phHost  = '';
     // Site-wide defaults (can be overridden by passing parameters)
-    $siteUrl = rtrim($_ENV['SITE_URL'] ?? 'https://mastertonroofing.co.uk', '/');
+    $siteUrl = rtrim($_ENV['SITE_URL'] ?? 'https://mastertonroofing.com', '/');
     $defaultImage = $siteUrl . '/public/img/templogo.png';
     $description = $description ?? 'Quality roofing solutions for your home and business. Contact Masterton Roofing for a free quote.';
     $image = $image ?? $defaultImage;
+    // Force canonical host and HTTPS. Do this before any output.
+    $desiredHost = parse_url($siteUrl, PHP_URL_HOST);
+    $requestHost = $_SERVER['HTTP_HOST'] ?? '';
+    $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)
+        || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https');
+    if (!$isHttps || strcasecmp($requestHost, $desiredHost) !== 0) {
+        $redirect = 'https://' . $desiredHost . $requestUri;
+        header('HTTP/1.1 301 Moved Permanently');
+        header('Location: ' . $redirect);
+        exit;
+    }
+
     // Build canonical URL if not provided
     if (!$canonical) {
         $uri = $_SERVER['REQUEST_URI'] ?? '/';

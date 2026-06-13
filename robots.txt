@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /vendor/
+Disallow: /node_modules/
+Allow: /
+
+Sitemap: https://mastertonroofing.co.uk/sitemap.xml

@@ -30,16 +30,47 @@ require_once __DIR__ . '/../Components/Footer.php';
 
 // PostHog removed: no distinct id helper
 
-function renderHeader($title = "Masterton Roofing") {
+function renderHeader($title = "Masterton Roofing", $description = null, $canonical = null, $image = null, $isArticle = false) {
     $phToken = '';
     $phHost  = '';
+    // Site-wide defaults (can be overridden by passing parameters)
+    $siteUrl = rtrim($_ENV['SITE_URL'] ?? 'https://mastertonroofing.co.uk', '/');
+    $defaultImage = $siteUrl . '/public/img/templogo.png';
+    $description = $description ?? 'Quality roofing solutions for your home and business. Contact Masterton Roofing for a free quote.';
+    $image = $image ?? $defaultImage;
+    // Build canonical URL if not provided
+    if (!$canonical) {
+        $uri = $_SERVER['REQUEST_URI'] ?? '/';
+        $uri = strtok($uri, '?'); // strip query
+        $canonical = $siteUrl . $uri;
+    }
     ?>
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title><?php echo $title; ?></title>
+        <title><?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
+        <meta name="description" content="<?php echo htmlspecialchars($description, ENT_QUOTES, 'UTF-8'); ?>">
+        <link rel="canonical" href="<?php echo htmlspecialchars($canonical, ENT_QUOTES, 'UTF-8'); ?>">
+        <meta name="robots" content="index,follow">
+        <!-- Open Graph -->
+        <meta property="og:locale" content="en_GB" />
+        <meta property="og:site_name" content="Masterton Roofing" />
+        <meta property="og:title" content="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>" />
+        <meta property="og:description" content="<?php echo htmlspecialchars($description, ENT_QUOTES, 'UTF-8'); ?>" />
+        <meta property="og:type" content="<?php echo $isArticle ? 'article' : 'website'; ?>" />
+        <meta property="og:url" content="<?php echo htmlspecialchars($canonical, ENT_QUOTES, 'UTF-8'); ?>" />
+        <meta property="og:image" content="<?php echo htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>" />
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>" />
+        <meta name="twitter:description" content="<?php echo htmlspecialchars($description, ENT_QUOTES, 'UTF-8'); ?>" />
+        <meta name="twitter:image" content="<?php echo htmlspecialchars($image, ENT_QUOTES, 'UTF-8'); ?>" />
+        <!-- Favicons -->
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
         <!-- Use CDN for Tailwind as a quick fix for broken styling if local build is missing -->
         <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -52,6 +83,23 @@ function renderHeader($title = "Masterton Roofing") {
                 (e.head||e.getElementsByTagName('head')[0]).appendChild(s);
             }(window,document,'betterstack','iw6mnzXcUZb3S4mxRVYGESeP');
             betterstack('init', { environment: 'production' });
+        </script>
+        <!-- JSON-LD structured data for Organization -->
+        <script type="application/ld+json">
+        <?php
+            $org = [
+                "@context" => "https://schema.org",
+                "@type" => "Organization",
+                "name" => "Masterton Roofing",
+                "url" => $siteUrl,
+                "logo" => $siteUrl . '/public/img/templogo.png',
+                "sameAs" => [
+                    'https://www.facebook.com/leeamasterton',
+                    'https://uk.linkedin.com/in/lee-masterton-43513811b'
+                ]
+            ];
+            echo json_encode($org, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        ?>
         </script>
         <?php /* PostHog removed: client snippet omitted */ ?>
         <script>

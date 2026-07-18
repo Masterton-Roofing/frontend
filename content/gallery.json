@@ -39,6 +39,16 @@
     "file": "LEEDS 3.jpg",
     "caption": "Leeds",
     "date": "2026-06-13",
-    "tags": ["work", "roofing"]
+    "tags": [ "work", "roofing" ]
   }
+  {
+    "file": "08.jpg",
+    "caption": "Emberly Grace",
+    "date": "2026-07-18",
+    "tags": [ "work", "roofing" ]
+  },
+  {
+    "file":  "Horsham 01.jpg"
+  }
+
 ]

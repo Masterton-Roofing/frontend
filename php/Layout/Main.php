@@ -85,19 +85,40 @@ function renderHeader($title = "Masterton Roofing", $description = null, $canoni
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
+                <!-- Grafana Faro RUM - must be first script -->
+        <script>
+            (function () {
+                var s = document.createElement('script');
+                s.src = 'https://unpkg.com/@grafana/faro-web-sdk@2/dist/bundle/faro-web-sdk.iife.js';
+                s.onload = function () {
+                    window.GrafanaFaroWebSdk.initializeFaro({
+                        url: 'https://faro-collector-prod-gb-south-1.grafana.net/collect/455e2a6a08e311a18d3b01e84f00dc22',
+                        app: { name: 'MR Website', version: '1.0.0', environment: 'production' },
+                        ignoreErrors: [
+                            /^ResizeObserver loop limit exceeded$/,
+                            /^ResizeObserver loop completed with undelivered notifications$/,
+                            /^Script error\.$/,
+                            /chrome-extension:\/\//,
+                            /moz-extension:\/\//,
+                        ],
+                    });
+                    var t = document.createElement('script');
+                    t.src = 'https://unpkg.com/@grafana/faro-web-tracing@2/dist/bundle/faro-web-tracing.iife.js';
+                    t.onload = function () {
+                        window.GrafanaFaroWebSdk.faro.instrumentations.add(
+                            new window.GrafanaFaroWebTracing.TracingInstrumentation()
+                        );
+                    };
+                    document.head.appendChild(t);
+                };
+                document.head.appendChild(s);
+            })();
+        </script>
+        
         <!-- Use CDN for Tailwind as a quick fix for broken styling if local build is missing -->
         <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <script>
-            !function(b,e,t,r){
-                b[t]=b[t]||function(...args){(b[t].q=b[t].q||[]).push(args)};
-                b[t].l=+new Date;
-                var s=e.createElement('script'); s.async=1; s.crossOrigin='anonymous';
-                s.src='https://betterstack.net/b.js?t='+r;
-                (e.head||e.getElementsByTagName('head')[0]).appendChild(s);
-            }(window,document,'betterstack','iw6mnzXcUZb3S4mxRVYGESeP');
-            betterstack('init', { environment: 'production' });
-        </script>
+
         <!-- JSON-LD structured data for Organization -->
         <script type="application/ld+json">
         <?php

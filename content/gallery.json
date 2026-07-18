@@ -82,6 +82,12 @@
     "date": "2026-07-18",
     "file": "First Avenue.jpg",
     "tags": [ "work", "roofing" ]
+  },
+  {
+    "file": "Danes Place.JPG",
+    "caption": "Danes Place",
+    "date": "2026-07-18",
+    "tags": [ "work", "roofing" ]
   }
 
 ]

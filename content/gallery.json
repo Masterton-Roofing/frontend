@@ -76,6 +76,12 @@
     "caption": "Oakfield",
     "date": "2026-07-18",
     "tags": [ "work", "roofing" ]
+  },
+  {
+    "caption": "First Avenue",
+    "date": "2026-07-18",
+    "file": "first ave.jpg",
+    "tags": [ "work", "roofing" ]
   }
 
 ]

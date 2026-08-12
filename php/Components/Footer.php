@@ -51,16 +51,16 @@ function renderFooter() {
                 <li><a href="/solutions/drone" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Drone Survey</a></li>
               </ul>
             </div>
-            <div>
+           <!-- <div>
               <p class="font-semibold tracking-wide text-[#f2e599]">
                 Company
               </p>
-              <ul class="mt-2 space-y-2">
+               <ul class="mt-2 space-y-2">
                 <li><a href="/about" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">About Us</a></li>
                 <li><a href="/about" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Team</a></li>
                 <li><a href="/about" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Safety</a></li>
               </ul>
-            </div>
+            </div> -->
             <div>
               <p class="font-semibold tracking-wide text-[#f2e599]">
                 Projects

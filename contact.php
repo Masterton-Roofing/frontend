@@ -27,7 +27,27 @@ renderHeader("Contact Us - Masterton Roofing");
         </div>
         <div class="text-center">
            <div>
-			   <span class="text-center text-3xl"><b>lee</b></span>
+			   <span class="text-center text-3xl"><b>Lee:</b>
+				   <br>
+				   <br>
+				   <p>Email:</p>
+					   <a href="mailto:lee@mastertonroofing.com">lee@mastertonroofing.com</a>
+				   <br>
+				   <p>Phone:</p>
+				   		<a href="tel:+4407368413848">07368413848</a>
+				   <br>
+			   </span>
+			   <br>
+			   <hr>
+			   <br>
+			   <span class="text-center text-3xl">
+				   <b>Mark:</b>
+				   <p>Email:</p>
+				   		<a href="mailto:mark@mastertonroofing.com">mark@mastertonroofing.com</a>
+				   <br>
+				   <p>Phone:</p>
+				   		<a href="tel:+44079009907832">079009907832</a>
+			   </span>
 			</div>
         </div>
     </div>

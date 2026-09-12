@@ -2,13 +2,6 @@ Options -MultiViews
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-
-    # Forces Apache to use the folder the .htaccess file actually sits in
-    RewriteBase /
-
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    
-    # Using a relative path allows it to resolve properly on both servers
-    RewriteRule ^(.*)$ router.php [QSA,L]
+    RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>

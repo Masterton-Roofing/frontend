@@ -12,14 +12,39 @@ function renderSolutionPageBase($params)
     ?>
 
     <!-- Hero Section -->
-    <section class="hero h-[60vh] md:h-[80vh] bg-cover bg-center"
-        style="background-image: url('<?php echo htmlspecialchars($params['heroImage']); ?>')">
-        <div class="flex items-center justify-center h-full bg-black/40 px-4">
-            <h1 class="text-white text-4xl md:text-5xl font-bold text-center">
-                <?php echo htmlspecialchars($params['heroTitle']); ?>
-            </h1>
-        </div>
-    </section>
+    <?php if (!empty($params['heroVideo']) || !empty($params['heroVideoEmbed'])): ?>
+        <section class="hero h-[60vh] md:h-[80vh] relative bg-black">
+            <?php if (!empty($params['heroVideo'])): ?>
+                <?php $heroPoster = !empty($params['heroPoster']) ? htmlspecialchars($params['heroPoster']) : ''; ?>
+                <video class="absolute inset-0 w-full h-full object-cover" autoplay muted loop playsinline <?php if ($heroPoster) echo 'poster="'.$heroPoster.'"'; ?>>
+                    <source src="<?php echo htmlspecialchars($params['heroVideo']); ?>" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            <?php else: ?>
+                <?php $embed = $params['heroVideoEmbed']; ?>
+                <div class="absolute inset-0 w-full h-full">
+                    <div class="w-full h-full" style="position:relative;">
+                        <iframe src="<?php echo htmlspecialchars($embed); ?>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="absolute inset-0 w-full h-full"></iframe>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <div class="absolute inset-0 bg-black/40"></div>
+            <div class="flex items-center justify-center h-full px-4 relative">
+                <h1 class="text-white text-4xl md:text-5xl font-bold text-center">
+                    <?php echo htmlspecialchars($params['heroTitle']); ?>
+                </h1>
+            </div>
+        </section>
+    <?php else: ?>
+        <section class="hero h-[60vh] md:h-[80vh] bg-cover bg-center"
+            style="background-image: url('<?php echo htmlspecialchars($params['heroImage']); ?>')">
+            <div class="flex items-center justify-center h-full bg-black/40 px-4">
+                <h1 class="text-white text-4xl md:text-5xl font-bold text-center">
+                    <?php echo htmlspecialchars($params['heroTitle']); ?>
+                </h1>
+            </div>
+        </section>
+    <?php endif; ?>
 
     <!-- Content Section -->
     <section class="py-16 bg-gray-100">

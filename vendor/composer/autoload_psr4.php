@@ -8,9 +8,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
-    'Symfony\\Component\\Clock\\' => array($vendorDir . '/symfony/clock'),
     'Spatie\\YamlFrontMatter\\' => array($vendorDir . '/spatie/yaml-front-matter/src'),
-    'Psr\\Clock\\' => array($vendorDir . '/psr/clock/src'),
-    'PostHog\\' => array($vendorDir . '/posthog/posthog-php/lib'),
     'App\\' => array($baseDir . '/src'),
 );

@@ -23,10 +23,10 @@ function renderNavbar() {
         <div class="absolute right-0 mt-0 pt-3 w-80 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200">
           <div class="bg-slate-800 rounded-lg shadow-2xl border border-slate-700 overflow-hidden">
             <div class="py-2">
-              <span class="block px-4 py-1 text-xs font-bold uppercase tracking-wider text-slate-500">
+              <span class="block px-4 py-1 text-xs font-bold uppercase tracking-wider text-slate-500 text-[#f2e599]">
                 Main Solutions
               </span>
-              <a href="/solutions/pvc" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition">
+              <a href="/solutions/pvc" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition ">
                 PVC Membrane
               </a>
               <a href="/solutions/vcl" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700 hover:text-white transition">

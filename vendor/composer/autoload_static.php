@@ -7,8 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInitd07511f844a1251c627b2b12ccd01a94
 {
     public static $files = array (
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
-        '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -16,13 +16,7 @@ class ComposerStaticInitd07511f844a1251c627b2b12ccd01a94
         array (
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Component\\Yaml\\' => 23,
-            'Symfony\\Component\\Clock\\' => 24,
             'Spatie\\YamlFrontMatter\\' => 23,
-        ),
-        'P' =>
-        array (
-            'Psr\\Clock\\' => 10,
-            'PostHog\\' => 8,
         ),
         'A' =>
         array (
@@ -39,21 +33,9 @@ class ComposerStaticInitd07511f844a1251c627b2b12ccd01a94
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
         ),
-        'Symfony\\Component\\Clock\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/symfony/clock',
-        ),
         'Spatie\\YamlFrontMatter\\' =>
         array (
             0 => __DIR__ . '/..' . '/spatie/yaml-front-matter/src',
-        ),
-        'Psr\\Clock\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/psr/clock/src',
-        ),
-        'PostHog\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/posthog/posthog-php/lib',
         ),
         'App\\' =>
         array (

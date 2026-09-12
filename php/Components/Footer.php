@@ -62,15 +62,10 @@ function renderFooter() {
               </ul>
             </div> -->
             <div>
-              <p class="font-semibold tracking-wide text-[#f2e599]">
-                Projects
-              </p>
-              <ul class="mt-2 space-y-2">
-                <li><a href="/projects" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Recent Work</a></li>
-                <li><a href="/projects" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Case Studies</a></li>
-              </ul>
             </div>
+
             <div>
+			
               <p class="font-semibold tracking-wide text-[#f2e599]">Legal</p>
               <ul class="mt-2 space-y-2">
                 <li><a href="/tos" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Terms of Service</a></li>

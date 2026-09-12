@@ -21,7 +21,7 @@ renderHeader("About Us - Masterton Roofing");
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
         <div class="bg-black/40 p-12 rounded-3xl backdrop-blur-sm inline-block">
             <h1 class="text-5xl md:text-7xl text-white font-extrabold mb-4">About Us</h1>
-            <p class="text-2xl text-gray-100 font-medium">Over 3 decades of roofing excellence.</p>
+            <p class="text-2xl text-gray-100 font-medium"> Roofing excellence since 2021.</p>
         </div>
     </div>
 </section>
@@ -42,16 +42,12 @@ renderHeader("About Us - Masterton Roofing");
             <div class="w-full lg:w-1/2">
                 <div class="grid grid-cols-2 gap-6">
                     <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 text-center shadow-sm">
-                        <span class="block text-5xl font-bold text-teal-600 mb-2">30+</span>
+                        <span class="block text-5xl font-bold text-teal-600 mb-2">5+</span>
                         <span class="text-gray-500 font-bold uppercase tracking-widest text-xs">Years of Service</span>
                     </div>
                     <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 text-center shadow-sm">
-                        <span class="block text-5xl font-bold text-teal-600 mb-2">1k+</span>
+                        <span class="block text-5xl font-bold text-teal-600 mb-2">200+</span>
                         <span class="text-gray-500 font-bold uppercase tracking-widest text-xs">Projects Done</span>
-                    </div>
-                    <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 text-center shadow-sm">
-                        <span class="block text-5xl font-bold text-teal-600 mb-2">100%</span>
-                        <span class="text-gray-500 font-bold uppercase tracking-widest text-xs">Quality Guaranteed</span>
                     </div>
                     <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 text-center shadow-sm">
                         <span class="block text-5xl font-bold text-teal-600 mb-2">24/7</span>
@@ -72,7 +68,7 @@ renderHeader("About Us - Masterton Roofing");
                     <div class="w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center font-bold text-2xl shadow-xl">M</div>
                     <div class="text-left">
                         <p class="font-bold text-xl">The Masterton Team</p>
-                        <p class="text-teal-400">Roofing Excellence Since 1990</p>
+                        <p class="text-teal-400">Roofing Excellence Since 2021</p>
                     </div>
                 </div>
             </div>

@@ -51,16 +51,16 @@ function renderFooter() {
                 <li><a href="/solutions/drone" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Drone Survey</a></li>
               </ul>
             </div>
-            <div>
+           <!-- <div>
               <p class="font-semibold tracking-wide text-[#f2e599]">
                 Company
               </p>
-              <ul class="mt-2 space-y-2">
+               <ul class="mt-2 space-y-2">
                 <li><a href="/about" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">About Us</a></li>
                 <li><a href="/about" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Team</a></li>
                 <li><a href="/about" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Safety</a></li>
               </ul>
-            </div>
+            </div> -->
             <div>
               <p class="font-semibold tracking-wide text-[#f2e599]">
                 Projects
@@ -83,7 +83,7 @@ function renderFooter() {
           <div>
             <p class="text-sm text-gray-100">
               © Copyright 2026 Masterton Roofing Ltd. All rights reserved. Website
-              written by <a href="https://meowcat.site">Ben House.</a> Powered by <a class="hover:text-[#f2e599]" href="https://php.net">PHP.</a>
+              written by <a href="https://meowcats.space">Ben House.</a> Powered by <a class="hover:text-[#f2e599]" href="https://php.net">PHP.</a>
                 This website is <a href="https://github.com/Masterton-Roofing/frontend" target="_blank" class="hover:text-[#f2e599]">Open Source.</a>
             </p>
             <p class="text-xs text-gray-400 mt-2">

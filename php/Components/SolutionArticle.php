@@ -1,11 +1,11 @@
 <?php
 function renderSolutionArticle($params) {
-    $title = $params['title'];
-    $blurb = $params['blurb'];
-    $about = $params['about'];
-    $specs = $params['specs'];
-    $images = isset($params['images']) ? $params['images'] : [];
-    $id = 'article-' . md5($title);
+    $title = isset($params['title']) ? $params['title'] : '';
+    $blurb = isset($params['blurb']) ? $params['blurb'] : '';
+    $about = isset($params['about']) ? $params['about'] : '';
+    $specs = isset($params['specs']) ? $params['specs'] : '';
+    $images = isset($params['images']) && is_array($params['images']) ? $params['images'] : [];
+    $id = 'article-' . md5($title ?: uniqid('', true));
     ?>
     <article class="w-full max-w-4xl mx-auto my-8 bg-white rounded-xl shadow-md border border-gray-200">
         <!-- Preview -->
@@ -46,9 +46,45 @@ function renderSolutionArticle($params) {
                                 </video>
                             </div>
                         <?php else: /* videoEmbed provided */ ?>
-                            <?php $embed = $params['videoEmbed']; ?>
-                            <div class="relative" style="padding-top:56.25%">
-                                <iframe data-src="<?php echo htmlspecialchars($embed); ?>" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="absolute inset-0 w-full h-full"></iframe>
+                            <?php $embed = isset($params['videoEmbed']) ? $params['videoEmbed'] : ''; ?>
+                            <?php
+                                // Generate a safe id for the embed container
+                                $embedId = $id . '-embed';
+                                // Try to extract YouTube ID for a thumbnail if possible
+                                $ytThumb = '';
+                                if (strpos($embed, 'youtube.com/embed/') !== false) {
+                                    $parts = explode('youtube.com/embed/', $embed);
+                                    if (isset($parts[1])) {
+                                        $vid = preg_replace('/[^A-Za-z0-9_\-]/', '', $parts[1]);
+                                        if ($vid) {
+                                            $ytThumb = 'https://i.ytimg.com/vi/' . $vid . '/hqdefault.jpg';
+                                        }
+                                    }
+                                }
+                            ?>
+                            <div id="<?php echo $embedId; ?>" class="relative" style="padding-top:56.25%">
+                                <?php if (!empty($ytThumb) || !empty($params['videoPoster'])): ?>
+                                    <?php $poster = !empty($params['videoPoster']) ? $params['videoPoster'] : $ytThumb; ?>
+                                    <div class="absolute inset-0 w-full h-full bg-black flex items-center justify-center" style="background-size:cover; background-position:center; background-image: url('<?php echo htmlspecialchars($poster); ?>')">
+                                        <button type="button" onclick="(function(){
+                                            var c = document.getElementById('<?php echo $embedId; ?>');
+                                            if (!c) return;
+                                            var iframe = document.createElement('iframe');
+                                            iframe.setAttribute('src', '<?php echo htmlspecialchars($embed); ?>');
+                                            iframe.setAttribute('frameborder', '0');
+                                            iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
+                                            iframe.setAttribute('allowfullscreen', '');
+                                            iframe.className = 'absolute inset-0 w-full h-full';
+                                            iframe.loading = 'lazy';
+                                            c.innerHTML = '';
+                                            c.appendChild(iframe);
+                                        })()" class="bg-black/50 rounded-full p-4 text-white shadow-lg hover:bg-black/60">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                        </button>
+                                    </div>
+                                <?php else: ?>
+                                    <iframe src="<?php echo htmlspecialchars($embed); ?>" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen class="absolute inset-0 w-full h-full" loading="lazy"></iframe>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
                     </div>

@@ -2,14 +2,13 @@ Options -MultiViews
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
-    # 1. Tells Apache your project lives in the /mr/ subfolder
-    RewriteBase /mr/
 
-    # 2. Ensures real files (like images, CSS, JS) bypass the router
+    # Forces Apache to use the folder the .htaccess file actually sits in
+    RewriteBase /
+
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     
-    # 3. Directs all other traffic to router.php instead of index.php
+    # Using a relative path allows it to resolve properly on both servers
     RewriteRule ^(.*)$ router.php [QSA,L]
 </IfModule>

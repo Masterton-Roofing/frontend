@@ -12,6 +12,7 @@ function renderNavbar() {
 
     <!-- Desktop Navigation -->
     <div class="hidden lg:flex items-center space-x-8">
+		<a href="/home" class="flex items-center text-gray-300 hover:text-white font-bold transition">Home</a>
       <!-- Solutions Dropdown -->
       <div class="relative group">
         <a href="/solutions" class="flex items-center text-gray-300 hover:text-white font-bold transition">

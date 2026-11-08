@@ -25,21 +25,19 @@ renderHeader("Contact Us - Masterton Roofing");
         <div class="mb-12">
             <h2 class="text-4xl font-extrabold text-slate-900 mb-4">Get in Touch</h2>
         </div>
-        <div class="text-center">
+        <div class="text-center border-4 border-bg-mr-blue">
            <div>
 			   <span class="text-center text-3xl"><b>Lee:</b>
-				   <br>
 				   <br>
 				   <p>Email:</p>
 					   <a href="mailto:lee@mastertonroofing.com">lee@mastertonroofing.com</a>
 				   <br>
 				   <p>Phone:</p>
 				   		<a href="tel:+4407368413848">07368413848</a>
-				   <br>
+					<br>
 			   </span>
 			   <br>
-			   <hr>
-			   <br>
+			   <hr class="border-2 border-bg-mr-blue">
 			   <span class="text-center text-3xl">
 				   <b>Mark:</b>
 				   <p>Email:</p>
@@ -48,14 +46,13 @@ renderHeader("Contact Us - Masterton Roofing");
 				   <p>Phone:</p>
 				   		<a href="tel:+44079009907832">079009907832</a>
 			   </span>
+				<br>
+				<br>
 			</div>
         </div>
     </div>
 </section>
 
-<script>
-    // PostHog integration removed: form submits normally to Formspree
-</script>
 
 <?php
 renderPageFooter();

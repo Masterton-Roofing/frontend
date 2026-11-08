@@ -124,7 +124,7 @@ function renderHeader($title = "Masterton Roofing", $description = null, $canoni
                 document.head.appendChild(s);
             })();
         </script>
-        
+
         <!-- Use CDN for Tailwind as a quick fix for broken styling if local build is missing -->
         <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -146,7 +146,6 @@ function renderHeader($title = "Masterton Roofing", $description = null, $canoni
             echo json_encode($org, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         ?>
         </script>
-        <?php /* PostHog removed: client snippet omitted */ ?>
         <script>
             tailwind.config = {
                 theme: {

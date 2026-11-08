@@ -17,9 +17,9 @@ renderHeader("Privacy Policy | Masterton Roofing");
 </head>
 
 <div class="max-w-4xl mx-auto px-4 py-16">
-    <div class="bg-white rounded-lg shadow-xl p-8 md:p-12 prose prose-blue max-w-none">
+    <div class="bg-white rounded-lg p-8 md:p-12 prose prose-blue max-w-none">
         <h1 class="text-3xl font-bold text-bg-mr-blue mb-8 border-b pb-4">Privacy Policy</h1>
-        
+
         <p class="text-gray-600 mb-6 italic">Last Updated: April 11, 2026</p>
 
         <section class="mb-10">

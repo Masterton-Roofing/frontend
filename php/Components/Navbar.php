@@ -1,7 +1,7 @@
 <?php
 function renderNavbar() {
     ?>
-    <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 bg-[#01597c] text-white shadow-xl transition-all duration-300">
+    <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 bg-[#01597c] text-white transition-all duration-300">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex justify-between items-center h-20">
 
@@ -102,7 +102,7 @@ function renderNavbar() {
         <a href="/solutions/pvc" class="block py-2 text-gray-400 hover:text-white">PVC Membrane</a>
         <a href="/solutions/vcl" class="block py-2 text-gray-400 hover:text-white">Vapour Control Layer (VCL)</a>
         <a href="/solutions/drone" class="block py-2 text-gray-400 hover:text-white">Drone Surveys</a>
-        
+
         <div class="pt-2 border-t border-slate-800">
           <button id="mobile-additional-button" class="flex justify-between items-center w-full py-2 text-gray-300 hover:text-white font-semibold">
             Additional Services

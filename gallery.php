@@ -24,7 +24,7 @@ $images = getGalleryImagesWithMeta();
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <?php foreach ($images as $index => $img): ?>
-            <div class="group rounded-xl overflow-hidden bg-white transition duration-300">
+            <div class="group rounded-xl overflow-hidden bg-white transition duration-300 border-6 border-bg-mr"">
                 <div class="relative overflow-hidden aspect-video cursor-pointer" onclick="openLightbox(<?php echo $index; ?>)">
                     <img
                             src="/public/img/gallery/<?php echo htmlspecialchars($img['file']); ?>"

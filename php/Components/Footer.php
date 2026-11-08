@@ -80,6 +80,7 @@ function renderFooter() {
                 &copy; Copyright <?php echo date("Y"); ?> Masterton Roofing Ltd. All rights reserved. Website
               written by <a href="https://meowcats.space">Ben House.</a> Powered by <a class="hover:text-[#f2e599]" href="https://php.net">PHP.</a>
                 This website is <a href="https://github.com/Masterton-Roofing/frontend" target="_blank" class="hover:text-[#f2e599]">Open Source.</a>
+                No AI was used in the development of this site.
             </p>
             <p class="text-xs text-gray-400 mt-2">
             </p>

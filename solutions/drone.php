@@ -12,7 +12,7 @@ renderSolutionPageBase([
             'blurb' => "High-tech aerial inspections for precise roof assessment without the need for scaffolding.",
             'about' => "Our drone surveys provide a safe and cost-effective way to inspect roofs of any height or complexity. Using high-resolution cameras can complete video footage with zoomed in photos which can identify potential leaks, damage, and debris without setting foot on the roof.",
             'images' => [],
-            'video' => '/public/img/vid/portsdown.mp4',
+            'video' => 'https://youtu.be/ujdZlquFwVQ?si=-jFnoGmud0PhLShJ',
             'videoPoster' => '/public/img/hero.jpg'
         ]
     ]

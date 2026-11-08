@@ -7,7 +7,7 @@ function renderSolutionArticle($params) {
     $images = isset($params['images']) && is_array($params['images']) ? $params['images'] : [];
     $id = 'article-' . md5($title ?: uniqid('', true));
     ?>
-    <article class="w-full max-w-4xl mx-auto my-8 bg-white rounded-xl shadow-md border border-gray-200">
+    <article class="w-full max-w-4xl mx-auto my-8 bg-white rounded-xl border border-gray-200">
         <!-- Preview -->
         <div class="p-6">
             <h2 class="text-xl md:text-2xl font-bold text-gray-800"><?php echo $title; ?></h2>
@@ -117,7 +117,7 @@ if (typeof toggleArticle !== 'function') {
         const content = document.getElementById(id);
         const arrow = btn.querySelector('span:last-child');
         const text = btn.querySelector('.btn-text');
-        
+
         if (content.style.maxHeight && content.style.maxHeight !== '0px') {
             // collapse
             content.style.maxHeight = '0px';

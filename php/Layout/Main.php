@@ -132,6 +132,7 @@ function renderHeader($title = "Masterton Roofing", $description = null, $canoni
         <!-- JSON-LD structured data for Organization -->
         <script type="application/ld+json">
         <?php
+        // I forgot what this was for lmao
             $org = [
                 "@context" => "https://schema.org",
                 "@type" => "Organization",

@@ -77,7 +77,7 @@ function renderFooter() {
         <div class="flex flex-col justify-between pt-5 pb-10 border-t border-slate-700 sm:flex-row">
           <div>
             <p class="text-sm text-gray-100">
-              © Copyright 2026 Masterton Roofing Ltd. All rights reserved. Website
+                &copy; Copyright <?php echo date("Y"); ?> Masterton Roofing Ltd. All rights reserved. Website
               written by <a href="https://meowcats.space">Ben House.</a> Powered by <a class="hover:text-[#f2e599]" href="https://php.net">PHP.</a>
                 This website is <a href="https://github.com/Masterton-Roofing/frontend" target="_blank" class="hover:text-[#f2e599]">Open Source.</a>
             </p>

@@ -21,10 +21,10 @@ $images = getGalleryImagesWithMeta();
 
 <div class="max-w-7xl mx-auto px-4 py-12">
     <h1 class="text-4xl font-bold text-bg-mr-blue mb-8">Project Gallery</h1>
-    
+
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <?php foreach ($images as $index => $img): ?>
-            <div class="group rounded-xl overflow-hidden bg-white shadow-md hover:shadow-xl transition duration-300">
+            <div class="group rounded-xl overflow-hidden bg-white transition duration-300">
                 <div class="relative overflow-hidden aspect-video cursor-pointer" onclick="openLightbox(<?php echo $index; ?>)">
                     <img
                             src="/public/img/gallery/<?php echo htmlspecialchars($img['file']); ?>"
@@ -33,7 +33,7 @@ $images = getGalleryImagesWithMeta();
                             alt="<?php echo htmlspecialchars($img['caption'] ?: 'Roofing project'); ?>"
                     >
                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-                        <i class="fas fa-search-plus text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-3xl"></i>
+                        <i class="fas fa-search-plus text-white text-3xl opacity-0 scale-50 -rotate-90 group-hover:opacity-100 group-hover:scale-100 group-hover:rotate-0 transition-all duration-300 ease-out"></i>
                     </div>
                 </div>
 
@@ -48,7 +48,7 @@ $images = getGalleryImagesWithMeta();
             </div>
         <?php endforeach; ?>
     </div>
-    
+
     <?php if (empty($images)): ?>
         <div class="text-center py-20">
             <p class="text-xl text-gray-500">No images found in the gallery yet. Please check back later!</p>
@@ -61,11 +61,11 @@ $images = getGalleryImagesWithMeta();
     <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-4xl hover:text-gray-300 focus:outline-none z-50">
         <i class="fas fa-times"></i>
     </button>
-    
+
     <button onclick="prevImage()" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-gray-300 focus:outline-none z-50">
         <i class="fas fa-chevron-left"></i>
     </button>
-    
+
     <button onclick="nextImage()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-gray-300 focus:outline-none z-50">
         <i class="fas fa-chevron-right"></i>
     </button>

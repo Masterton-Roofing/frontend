@@ -65,7 +65,7 @@ function renderFooter() {
             </div>
 
             <div>
-			
+
               <p class="font-semibold tracking-wide text-[#f2e599]">Legal</p>
               <ul class="mt-2 space-y-2">
                 <li><a href="/tos" class="transition-colors duration-300 text-gray-300 hover:text-[#f2e599]">Terms of Service</a></li>
@@ -82,20 +82,6 @@ function renderFooter() {
                 This website is <a href="https://github.com/Masterton-Roofing/frontend" target="_blank" class="hover:text-[#f2e599]">Open Source.</a>
             </p>
             <p class="text-xs text-gray-400 mt-2">
-              <?php
-                $buildId = \App\Utils\Version::getBuildId();
-                $commitUrl = \App\Utils\Version::getCommitUrl();
-                if ($buildId) {
-                    $short = htmlspecialchars(substr($buildId, 0, 7), ENT_QUOTES, 'UTF-8');
-                    $full = htmlspecialchars($buildId, ENT_QUOTES, 'UTF-8');
-                    if ($commitUrl) {
-                        $href = htmlspecialchars($commitUrl, ENT_QUOTES, 'UTF-8');
-                        echo 'Version: <a href="' . $href . '" target="_blank" title="Commit ' . $full . '" class="hover:underline">' . $short . '</a>';
-                    } else {
-                        echo 'Version: ' . $short;
-                    }
-                }
-              ?>
             </p>
           </div>
           <div class="flex items-center mt-4 space-x-4 sm:mt-0">

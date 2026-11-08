@@ -3,6 +3,12 @@ FROM php:8.5-apache
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
+# Install ZIP support for Composer
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libzip-dev unzip \
+    && docker-php-ext-install zip \
+    && rm -rf /var/lib/apt/lists/*
+
 # Enable Apache modules and move the container listener to 8081.
 RUN a2enmod rewrite headers \
     && sed -i 's/Listen 80/Listen 8081/' /etc/apache2/ports.conf \

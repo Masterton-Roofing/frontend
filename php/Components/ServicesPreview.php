@@ -33,7 +33,7 @@ function renderServicesPreview() {
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 <?php foreach ($services as $service): ?>
                     <div
-                        class="text-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition"
+                        class="text-center p-6 bg-white rounded-xl shadow-sm"
                     >
                         <div class="text-blue-600 flex justify-center mb-4">
                             <i class="<?php echo $service['icon_class']; ?>" style="font-size: 40px; color: #01597c;"></i>

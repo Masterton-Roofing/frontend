@@ -1,0 +1,6 @@
+.git
+.githooks
+.github
+vendor
+php.zip
+composer.json.bak
